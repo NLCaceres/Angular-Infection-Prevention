@@ -31,7 +31,7 @@ export class ProfessionService {
     this.messageService._message.next(
       "Loading Profession Information: All Professions Fetched"
     );
-    return this.http.get<Profession[]>(`${this.localHost}professions`).pipe(
+    return this.http.get<Profession[]>(`${this.HOST}professions`).pipe(
       tap(_ => this.log("Fetched all professions from DB")),
       catchError(this.handleError<Profession[]>("getAllProfessions", []))
     );
@@ -40,7 +40,7 @@ export class ProfessionService {
     this.messageService._message.next(
       "Loading Profession Information: This Profession Fetched"
     );
-    return this.http.get<Profession>(`${this.localHost}profession/${id}`).pipe(
+    return this.http.get<Profession>(`${this.HOST}profession/${id}`).pipe(
       tap(_ => this.log(`Fetched Profession with id: ${id}`)),
       catchError(this.handleError<Profession>(`getProfession id=${id}`))
     );
@@ -50,7 +50,7 @@ export class ProfessionService {
       return of([]);
     }
     return this.http
-      .get<Profession[]>(`${this.localHost}professions/?label=${term}`)
+      .get<Profession[]>(`${this.HOST}professions/?label=${term}`)
       .pipe(
         tap(_ => this.log(`Found Profession Matching "${term}"`)),
         catchError(this.handleError<Profession[]>("searchProfessions", []))
@@ -61,7 +61,7 @@ export class ProfessionService {
       "Loading Profession Information: Added this new Profession"
     );
 
-    const endpoint = `${this.localHost}professions/create`;
+    const endpoint = `${this.HOST}professions/create`;
     return this.http.post<Profession>(endpoint, profession, httpOptions).pipe(
       tap(_ =>
         this.log(
@@ -78,7 +78,7 @@ export class ProfessionService {
       "Loading Profession Information: This Profession Updated"
     );
     return this.http
-      .put<void>(`${this.localHost}profession/${id}`, profession, httpOptions)
+      .put<void>(`${this.HOST}profession/${id}`, profession, httpOptions)
       .pipe(
         tap(_ => this.log(`Updated Profession id=${profession._id}`)),
         catchError(this.handleError<any>(`updateProfession`))
@@ -88,7 +88,7 @@ export class ProfessionService {
     this.messageService._message.next(
       "Loading Profession Information: This Profession Deleted"
     );
-    const endpoint = `${this.localHost}profession/${id}`;
+    const endpoint = `${this.HOST}profession/${id}`;
     return this.http.delete<Profession>(endpoint, httpOptions).pipe(
       tap(_ => this.log(`Deleted profession with id: ${id}`)),
       catchError(this.handleError<Profession>(`deleteProfession`))
