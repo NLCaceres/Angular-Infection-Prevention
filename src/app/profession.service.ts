@@ -20,7 +20,6 @@ const httpOptions = {
 })
 export class ProfessionService {
   // * This here is for later when I create routes in Express
-  private HOST = "https://safe-retreat-87739.herokuapp.com/api/";
   private localHost = "http://localhost:3000/api/";
 
   constructor(
