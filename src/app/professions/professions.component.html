@@ -1,0 +1,22 @@
+<div class="d-flex align-items-stretch">
+  <sidebar id="sidebar" class="d-inline-block d-lg mx-3 my-3"></sidebar>
+  <div id="mainContent" class="d-inline-block">
+    <h2>Hospital Professions</h2>
+    <a routerLink="/professions/add">
+      <button class="btn btn-danger">Add Profession</button>
+    </a>
+
+    <ul>
+      <!-- Angular's templating engine allows you to use | to pipe different formats into your strings-->
+      <!-- You can even make your own-->
+      <li *ngFor="let profession of professions; let i = index">
+        <a routerLink="/profession/{{ profession._id }}">
+          <span id="profession{{ i }}">
+            {{ profession.observed_occupation | uppercase }}
+            {{ profession.service_discipline }}
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div id="filterGroup">
+  <h3>Filter</h3>
+  <div class="input-group" id="searchBarContainer">
+    <div class="input-group-prepend">
+      <span class="input-group-text">@</span>
+    </div>
+    <ng-template #resultTemplate let-r="result" let-t="term">
+      <ngb-highlight
+        [result]="r.label"
+        [term]="t"
+        routerLink="/profession/{{ r._id }}"
+      >
+      </ngb-highlight>
+    </ng-template>
+    <input
+      #searchBox
+      type="text"
+      class="form-control"
+      [(ngModel)]="professions"
+      [ngbTypeahead]="search"
+      (input)="search(searchBox.value)"
+      [resultTemplate]="resultTemplate"
+    />
+  </div>
+</div>

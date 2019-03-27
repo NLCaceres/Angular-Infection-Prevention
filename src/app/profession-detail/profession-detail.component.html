@@ -1,0 +1,62 @@
+<div class="container mt-2">
+  <button type="button" class="btn btn-danger" (click)="goBack()">
+    Go Back
+  </button>
+  <div *ngIf="!profession">
+    <h3>Unable to retrieve the proper profession</h3>
+  </div>
+  <div *ngIf="profession">
+    <h2>
+      Would you like to edit this Profession?:
+      {{ profession.observed_occupation }} {{ profession.service_discipline }}
+    </h2>
+    <div>
+      <span></span>
+      <div>
+        <label
+          >MongoDB ID
+          <input
+            [(ngModel)]="profession._id"
+            placeholder="Mongo DB ID String"
+          />
+        </label>
+      </div>
+    </div>
+    <div>
+      <span></span>
+      <div>
+        <label
+          >Observed Occupation
+          <input
+            [(ngModel)]="profession.observed_occupation"
+            placeholder="Observed Occupation"
+          />
+        </label>
+      </div>
+    </div>
+    <div>
+      <span></span>
+      <div>
+        <label
+          >Service Discipline
+          <input
+            [(ngModel)]="profession.service_discipline"
+            placeholder="Service Discipline"
+          />
+        </label>
+      </div>
+    </div>
+    <span>
+      <button class="btn btn-danger mr-4" (click)="update()">
+        Save Changes?
+      </button>
+      <button
+        class="btn btn-danger ml-4"
+        title="delete profession"
+        (click)="delete(profession)"
+      >
+        Delete this Entry?
+      </button>
+    </span>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="container mt-2">
+  <button type="button" class="btn btn-danger" (click)="goBack()">
+    Go Back
+  </button>
+  <h2>Add New Profession</h2>
+  <div>
+    <label
+      >Observed Occupation
+      <input
+        type="text"
+        placeholder="Observed Occupation"
+        #observedOccupation
+      />
+    </label>
+  </div>
+
+  <div>
+    <label
+      >Service Discipline
+      <input type="text" placeholder="Service Discipline" #serviceDiscipline />
+    </label>
+  </div>
+
+  <button
+    class="btn btn-danger"
+    (click)="
+      add(observedOccupation.value, serviceDiscipline.value);
+      observedOccupation.value = '';
+      serviceDiscipline.value = ''
+    "
+  >
+    Add
+  </button>
+</div>
