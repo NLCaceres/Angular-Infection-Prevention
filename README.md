@@ -14,3 +14,8 @@ Remaining routes related to other models built in the Express App. Most other pa
 
 Employees and Reports routes. Once these go up, report creation and data collection (biggest functionality of the app)
 can begin. From there, build upon data analysis and data reporting.
+
+## Questions/Problems
+
+Currently using express in-app to have the angular app serve itself the static files required. Having a separate backend
+app, how can I send the static dist folder from there instead. Proxy seems to only work for local dev, so hmm
