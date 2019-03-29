@@ -12,14 +12,14 @@ import { ProfessionService } from "../profession.service";
 export class SidebarComponent implements OnInit {
   // ! Wondering why the $? Convention to denote observable
   public professions: Profession;
-  private searchTerm = new Subject<string>();
+  //private searchTerm = new Subject<string>();
 
   constructor(private professionService: ProfessionService) {}
 
   ngOnInit() {}
 
-  search = (searchTerm: Subject<string>) =>
-    searchTerm.pipe(
+  search = (term$: Subject<string>) =>
+    term$.pipe(
       debounceTime(300), // ! Wait 300 ms after each keystroke before considering a term
       distinctUntilChanged(), // ! Ignore new term if same as previous term
       switchMap((term: string) =>
