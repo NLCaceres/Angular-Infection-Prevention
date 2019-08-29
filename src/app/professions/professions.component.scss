@@ -1,0 +1,16 @@
+$font-stack: Arial, Helvetica, sans-serif;
+$clicked-color: #ff4d4d;
+
+h2 {
+  font-family: $font-stack;
+}
+li {
+  font-family: $font-stack;
+}
+.selected {
+  background-color: $clicked-color;
+}
+
+span[id*="profession"]:hover {
+  background-color: $clicked-color;
+}

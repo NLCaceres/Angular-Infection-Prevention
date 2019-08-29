@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+// ! Instead of modifying the angular.json file doing this enables modifications to bootstrap's css
+// ! Only these two files are imported because they contain no info about components, ng-boootstrap takes care of that
+//@import "~bootstrap/scss/bootstrap-reboot";
+//@import "~bootstrap/scss/bootstrap-grid";
+// ! The above works but if you need components not included in ng-bootstrap then the below works better
+@import "variables";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+// ! Overriding variables here will not work, e.g.
+// ! .bg-primary {
+// !   background-color: $green;
+// ! }
+body {
+  background-color: #f9f9eb;
+}

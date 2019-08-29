@@ -3,31 +3,51 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "ng build --output-path dist"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^7.2.15",
+<<<<<<< HEAD
     "@angular/common": "^7.2.15",
     "@angular/compiler": "^7.2.15",
+=======
+    "@angular/cli": "^7.3.9",
+    "@angular/common": "^7.2.15",
+    "@angular/compiler": "^7.2.15",
+    "@angular/compiler-cli": "^7.2.15",
+>>>>>>> b5b5a71b52099c46f9e52100d2dca0df9b9a70d0
     "@angular/core": "^7.2.15",
     "@angular/forms": "^7.2.15",
     "@angular/platform-browser": "^7.2.15",
     "@angular/platform-browser-dynamic": "^7.2.15",
     "@angular/router": "^7.2.15",
+<<<<<<< HEAD
     "core-js": "^2.6.9",
+=======
+    "@ng-bootstrap/ng-bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
+    "core-js": "^2.6.9",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
+>>>>>>> b5b5a71b52099c46f9e52100d2dca0df9b9a70d0
     "rxjs": "~6.3.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@angular-devkit/build-angular": "^0.800.6",
     "@angular/cli": "^7.3.9",
     "@angular/compiler-cli": "^7.2.15",
+=======
+    "@angular-devkit/build-angular": "^0.13.9",
+>>>>>>> b5b5a71b52099c46f9e52100d2dca0df9b9a70d0
     "@angular/language-service": "^7.2.15",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
