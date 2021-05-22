@@ -1,6 +1,6 @@
 //Install express server
 const express = require("express");
-const path = require("path");
+const path = require("path"); //todo Purpose for the package in package.json, but not being used, so hmm
 
 const app = express();
 
