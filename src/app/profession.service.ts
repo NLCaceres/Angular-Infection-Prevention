@@ -4,6 +4,7 @@ import { Observable, of } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
 import { Profession } from "./Profession";
 import { MessageService } from "./message.service";
+import { environment } from "src/environments/environment";
 
 // ! Not certain the reason for it
 // ! But it seems to at least be a way for the server to identify what it's receiving
@@ -19,8 +20,8 @@ const httpOptions = {
   providedIn: "root" // ! Ensures that entire app can use it (from root and beyond)
 })
 export class ProfessionService {
-  // * This here is for later when I create routes in Express
-  private HOST = "https://safe-retreat-87739.herokuapp.com/api/";
+  //* In local dev, must have express-records repo running in background to serve up json data
+  private HOST = environment.apiHost || "http://localhost:3000";
 
   constructor(
     private http: HttpClient,
@@ -31,7 +32,7 @@ export class ProfessionService {
     this.messageService._message.next(
       "Loading Profession Information: All Professions Fetched"
     );
-    return this.http.get<Profession[]>(`${this.HOST}professions`).pipe(
+    return this.http.get<Profession[]>(`${this.HOST}/professions`).pipe(
       tap(_ => this.log("Fetched all professions from DB")),
       catchError(this.handleError<Profession[]>("getAllProfessions", []))
     );
@@ -40,7 +41,7 @@ export class ProfessionService {
     this.messageService._message.next(
       "Loading Profession Information: This Profession Fetched"
     );
-    return this.http.get<Profession>(`${this.HOST}profession/${id}`).pipe(
+    return this.http.get<Profession>(`${this.HOST}/profession/${id}`).pipe(
       tap(_ => this.log(`Fetched Profession with id: ${id}`)),
       catchError(this.handleError<Profession>(`getProfession id=${id}`))
     );
@@ -50,7 +51,7 @@ export class ProfessionService {
       return of([]);
     }
     return this.http
-      .get<Profession[]>(`${this.HOST}professions/?label=${term}`)
+      .get<Profession[]>(`${this.HOST}/professions/?label=${term}`)
       .pipe(
         tap(_ => this.log(`Found Profession Matching "${term}"`)),
         catchError(this.handleError<Profession[]>("searchProfessions", []))
@@ -61,7 +62,7 @@ export class ProfessionService {
       "Loading Profession Information: Added this new Profession"
     );
 
-    const endpoint = `${this.HOST}professions/create`;
+    const endpoint = `${this.HOST}/professions/create`;
     return this.http.post<Profession>(endpoint, profession, httpOptions).pipe(
       tap(_ =>
         this.log(
@@ -78,7 +79,7 @@ export class ProfessionService {
       "Loading Profession Information: This Profession Updated"
     );
     return this.http
-      .put<void>(`${this.HOST}profession/${id}`, profession, httpOptions)
+      .put<void>(`${this.HOST}/profession/${id}`, profession, httpOptions)
       .pipe(
         tap(_ => this.log(`Updated Profession id=${profession._id}`)),
         catchError(this.handleError<any>(`updateProfession`))
@@ -88,7 +89,7 @@ export class ProfessionService {
     this.messageService._message.next(
       "Loading Profession Information: This Profession Deleted"
     );
-    const endpoint = `${this.HOST}profession/${id}`;
+    const endpoint = `${this.HOST}/profession/${id}`;
     return this.http.delete<Profession>(endpoint, httpOptions).pipe(
       tap(_ => this.log(`Deleted profession with id: ${id}`)),
       catchError(this.handleError<Profession>(`deleteProfession`))
