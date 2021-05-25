@@ -36,6 +36,7 @@ app, it feels worth looking into creating a monolith. More importantly, it's pro
     - Once `npm run build` or `npm run postinstall` is run, the server will now have an updated dist folder to latch on and serve up fresh files!
         - So why keep postinstall? Because Heroku will notice it in package.json and run it, creating the dist folder it'll serve when running Express
           which makes having a Procfile (standard practice in most projects) unneeded! Heroku builds it, runs postinstall, then runs `npm run start`, serving it up!
+          - But turns out Heroku actually recognizes `ng build`! So adding NODE_BUILD_FLAG to Heroku's config vars with the exact flag `--configuration production` will tack on the production flag and make the right build for the start command. Keeping postinstall at that point would just mean building twice.
 
 - Worth noting, angular.json can have its own breaking changes. As an example, es5Support key was deprecated and caused a bit of trouble with basic updating. Since angular has a compiler and handy CLI, so running the command `ng update @angular/core@11 @angular/cli@11` followed by `ng update` should usually do the trick (besides the usual `npm audit fix`, of course)
     - If a major version update (i.e. 12.x to 13.x) or even multiple major versions upgrade, then worth checking out https://update.angular.io/
