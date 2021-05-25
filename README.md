@@ -1,6 +1,6 @@
 # AngRecords
 
-- Front-facing Web App that uses express-records as a back-end REST API. Running on Angular 2+ (7.2.0). Hosted by Heroku
+- Front-facing Web App that uses express-records as a back-end REST API. Running on Angular 2+ (12.0.0). Hosted by Heroku
 
 ## Currently Working
 
