@@ -1,42 +1,66 @@
-# AngRecords
-
-- Front-facing Web App that uses express-records as a back-end REST API. Running on Angular 2+ (12.0.0). Hosted by Heroku
+# Infection Protection - AngularJS Front-End
+- An AngularJS-based front-end Web App running on Angular 2+ (12.0.0) and currently using ExpressJS as a back-end REST API
+  - Soon this Angular app will instead interface a Spring Boot backend that serves data over a GraphQL API
+  - Firstly, however, this app will be updated to the latest version of Angular (15.2.4) to adopt more modern Angular practices
 
 ## Currently Working
-
-- All routes related to the Profession model currently run (locally, a production build will come soon)
+- All routes related to the Profession model currently run
 
 ## In Progress
+- Employees Route, Precaution Route, Location Route, Report Route
+  - Question is to see how easily they can each be mapped to a layout similar to the Profession Route for easy reuse.
+  - Highest Priorities are: 
+    - Employees (+ Profile page) as well as the Reports List page (with report creation and data graphing)
+    - Reports List page alongside the Creation page and data graphing, possibly via D3.js
+- Receive OAuth2 authorization from Spring Boot app and store token safely across CORS.
 
-- Remaining routes related to other models built in the Express App. Most other pages will follow similar HTML and routing.
-
-## Important Tasks
-
-- Update Ng all together or switch to React + Flask/Django stack.
-
-- Employees and Reports routes. Once these go up, report creation and data collection (biggest functionality of the app)
-can begin. From there, build upon data analysis and data reporting.
+## Related Apps
+- Android App: https://github.com/NLCaceres/Android-Records
+    - Nearing feature parity again (still needs several views missing in iOS)
+    - Targets Android 13 Tiramisu (Sdk 33) to 8 Oreo (Sdk 26)
+    - Future Developments
+        - Begin using Jetpack Compose to create views
+        - Add Room Library for local caching
+- Back-end resource server: https://github.com/NLCaceres/Ang-records
+    - Running Spring Boot with both a REST and GraphQL API available
+    - Future Developments
+      - OAuth token authentication
+- iOS App: https://github.com/NLCaceres/iOS-records 
+    - In the process of better separating code for readability and reusability by extracting business logic out 
+    of ViewModels and into Repositories/Services + Domain-layer reusable functions 
+    - Will need to add search bar to ReportList view for filtering
+    - Will need to feed data into SwiftUI Charts
 
 ## Questions/Problems
+- By using Vercel, is the ExpressJS server still needed in production? Probably not!
+  - How does it handle environmental variables though? 
+    - Exposing secrets is not a good idea, of course, and dotenv is technically
+    available to Angular apps. The idea for me has been to make `process.env.invis_vars` usable in the environment.ts files during the 
+    `ng build` process. Doing so allows, Angular to grab environment vars as it normally expects 
+      - BUT Vercel seems to be able to inject `process.env.SOME_VAR` pretty easily!
 
-- IMPORTANT! Resolve-url-loader issue is VERY common problem at the moment so fix as soon as the new package is ready!
-
-- Currently using Express in-app to have the angular app serve itself the static files required. Having a separate backend
-app, it feels worth looking into creating a monolith. More importantly, it's probably best to get rid of Express, possibly in favor of Django or Flask.
-    - On related note, Angular doesn't have true environment variables (read: invisible to prying eyes), even if it does a nifty system for swapping vars
-      on the fly just like dotenv does. BUT https://javascript.plainenglish.io/setup-dotenv-to-access-environment-variables-in-angular-9-f06c6ffb86c0
-      offers an idea to make dotenv vars compatible/available during `ng build`, making `process.env.invis_vars` usable in our environment.ts files!
-      Which, then, could of course be used as angular expects its environment vars to be used! `environment.invis_vars` in the rest of its TS files.
-
-- Ng-Bootstrap currently doesn't support Ang 12 BUT it should soon, specifically 10.x will support Ang 12.0, so in the mean time there's no problems with using Ang 12 and ng-bootstrap 9.x but as soon as possible UPGRADE.
+- Drop Ng-Bootstrap in favor of PicoCSS or MaterialUI
+  - PicoCSS could provide a simple yet appealing look that doesn't fall easily into the Bootstrap or Tailwind styles commonly seen
+  - MaterialUI though could provide a very appealing business aesthetic.
 
 ## Future Notice
 
-- How to serve up the files: Since we're using Express, server.js is where it'll look for the config. This config file (server.js) looks for the dist folder that `ng build` produces. BEFORE in the angular.json `ng build` was configured in projects: `{ ang-records: { architects: { build: { options: { outputPath: 'dist/ang-records' ...} } } } }` BUT NOW we changed it to `outputPath: 'dist'` so we can do a simple `npm run build` rather than what we originally did with `npm run postinstall` which specified the --output-path option like so, `ng build --output-path dist` under the hood.
-    - Once `npm run build` or `npm run postinstall` is run, the server will now have an updated dist folder to latch on and serve up fresh files!
-        - So why keep postinstall? Because Heroku will notice it in package.json and run it, creating the dist folder it'll serve when running Express
-          which makes having a Procfile (standard practice in most projects) unneeded! Heroku builds it, runs postinstall, then runs `npm run start`, serving it up!
-          - But turns out Heroku actually recognizes `ng build`! So adding NODE_BUILD_FLAG to Heroku's config vars with the exact flag `--configuration production` will tack on the production flag and make the right build for the start command. Keeping postinstall at that point would just mean building twice.
+- How to serve up the files: Since I'm using Express, server.js is where it'll look for the config. This config file (server.js) 
+looks for the dist folder that `ng build` produces. 
+  - BEFORE in the angular.json `ng build` was configured in projects to be: 
+    - `{ ang-records: { architects: { build: { options: { outputPath: 'dist/ang-records' ...} } } } }` 
+    - BUT NOW we changed it to `outputPath: 'dist'` so I can do a simple `npm run build` 
+    - AND NOT what I originally did with `npm run postinstall` which specified the --output-path option as follows:
+      - `ng build --output-path dist`
+  - Once `npm run build` or `npm run postinstall` is run, the server will now have an updated dist folder to latch on and serve up fresh files!
 
-- Worth noting, angular.json can have its own breaking changes. As an example, es5Support key was deprecated and caused a bit of trouble with basic updating. Since angular has a compiler and handy CLI, so running the command `ng update @angular/core@11 @angular/cli@11` followed by `ng update` should usually do the trick (besides the usual `npm audit fix`, of course)
-    - If a major version update (i.e. 12.x to 13.x) or even multiple major versions upgrade, then worth checking out https://update.angular.io/
+- Worth noting, angular.json can have its own breaking changes. 
+  - As an example, es5Support key was deprecated and caused a bit of trouble when I was doing a simple update
+  - BUT thanks to Angular's handy dandy CLI, I can run the following commands to solve most issues!
+    - `ng update @angular/core@11 @angular/cli@11`
+      - This updates to the latest patch version of this particular version
+    - `ng update` 
+      - This updates to the very latest major version of Angular!
+  - Generally, the above commands should do the trick (besides the usual `npm audit fix`, of course)
+  - BUT whenever a major version is released (i.e. 12.x to 13.x), and especially if multiple major versions needs to be upgraded, 
+  then [it's probably worth checking out Angular's updater](https://update.angular.io/)

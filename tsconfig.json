@@ -5,19 +5,30 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "module": "es2015",
+    "target": "ES2022",
+    "lib": ["dom", "DOM.Iterable", "ESNext"],
+
+    "module": "ES2022",
+    "esModuleInterop": true,
+    "isolatedModules": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "importHelpers": true,
+
+    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es5",
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": [
-      "es2018",
-      "dom"
-    ]
   },
   "angularCompilerOptions": {
     "strictTemplates": true
