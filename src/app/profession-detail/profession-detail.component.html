@@ -1,5 +1,5 @@
 <div class="container mt-2">
-  <button type="button" class="btn btn-danger" (click)="goBack()">
+  <button type="button" class="btn btn-danger mt-2 mb-4" (click)="goBack()">
     Go Back
   </button>
   <div *ngIf="!profession">
@@ -8,53 +8,31 @@
   <div *ngIf="profession">
     <h2>
       Would you like to edit this Profession?:
-      {{ profession.observed_occupation }} {{ profession.service_discipline }}
+      {{ profession.observedOccupation }} {{ profession.serviceDiscipline }}
     </h2>
-    <div>
-      <span></span>
-      <div>
-        <label
-          >MongoDB ID
-          <input
-            [(ngModel)]="profession._id"
-            placeholder="Mongo DB ID String"
-          />
-        </label>
-      </div>
+    <div class="my-4">
+      <label>
+        ID:
+        <input [(ngModel)]="profession._id" placeholder="ID" />
+      </label>
     </div>
-    <div>
-      <span></span>
-      <div>
-        <label
-          >Observed Occupation
-          <input
-            [(ngModel)]="profession.observed_occupation"
-            placeholder="Observed Occupation"
-          />
-        </label>
-      </div>
+    <div class="my-4">
+      <label>
+        Observed Occupation:
+        <input [(ngModel)]="profession.observedOccupation" placeholder="Observed Occupation" />
+      </label>
     </div>
-    <div>
-      <span></span>
-      <div>
-        <label
-          >Service Discipline
-          <input
-            [(ngModel)]="profession.service_discipline"
-            placeholder="Service Discipline"
-          />
-        </label>
-      </div>
+    <div class="my-4">
+      <label>
+        Service Discipline:
+        <input [(ngModel)]="profession.serviceDiscipline" placeholder="Service Discipline" />
+      </label>
     </div>
     <span>
-      <button class="btn btn-danger mr-4" (click)="update()">
+      <button class="btn btn-danger me-4" (click)="update()">
         Save Changes?
       </button>
-      <button
-        class="btn btn-danger ml-4"
-        title="delete profession"
-        (click)="delete()"
-      >
+      <button class="btn btn-danger ms-4" (click)="delete()">
         Delete this Entry?
       </button>
     </span>

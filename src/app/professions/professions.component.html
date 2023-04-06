@@ -1,22 +1,27 @@
-<div class="d-flex align-items-stretch">
-  <sidebar id="sidebar" class="d-inline-block d-lg mx-3 my-3"></sidebar>
-  <div id="mainContent" class="d-inline-block">
-    <h2>Hospital Professions</h2>
-    <a routerLink="/professions/add">
-      <button class="btn btn-danger">Add Profession</button>
-    </a>
-
-    <ul>
-      <!-- Angular's templating engine allows you to use | to pipe different formats into your strings-->
-      <!-- You can even make your own-->
-      <li *ngFor="let profession of professions; let i = index">
-        <a routerLink="/profession/{{ profession._id }}">
-          <span id="profession{{ i }}">
-            {{ profession.observed_occupation | uppercase }}
-            {{ profession.service_discipline }}
-          </span>
+<div class="container-fluid my-3">
+  <div class="row">
+    <div class="col-0 col-sm-3 col-lg-2 pe-sm-0">
+      <sidebar *ngIf="viewWidth >= 576"></sidebar>
+    </div>
+    <div class="col">
+      <div id="mainContent" class="d-inline-block mx-3">
+        <h2>Hospital Professions</h2>
+        <a routerLink="/professions/add">
+          <button class="btn btn-danger">Add Profession</button>
         </a>
-      </li>
-    </ul>
+    
+        <ul class="mt-3">
+          <li *ngFor="let profession of professions; let i = index">
+            <a routerLink="/profession/{{ profession._id }}">
+              <!-- Ang templates lets you use "|" as a pipe formatter for strings. You can even make custom ones! -->
+              <span id="profession{{ i }}">
+                {{ profession.observedOccupation | uppercase }}
+                {{ profession.serviceDiscipline }}
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>

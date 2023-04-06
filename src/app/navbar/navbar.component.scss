@@ -1,0 +1,41 @@
+.navbar-brand > div {
+  font-size: larger;
+  font-weight: bolder;
+  color: white;
+}
+
+.navbar-toggler {
+  &:focus {
+    box-shadow: 0 0 0 0.1rem white;
+  }
+}
+.navbar__divider {
+  flex: 1 1 100%;
+}
+.toggler-icon {
+  stroke: white;
+  stroke-width: 2;
+  stroke-linecap: round;
+  &-container {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.navbar-nav > li {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+
+  /* Order matters! Descending view width size comes after! */
+  @media (max-width: 767px) {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  @media (max-width: 575px) { /* Handles mobile views */
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+}
