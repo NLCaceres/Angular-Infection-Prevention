@@ -1,0 +1,10 @@
+.app-message__alert {
+  width: 90%;
+  
+  @media (min-width: 576px) {
+    width: 80%;
+  }
+  @media (min-width: 992px) {
+    width: 70%;
+  }
+}

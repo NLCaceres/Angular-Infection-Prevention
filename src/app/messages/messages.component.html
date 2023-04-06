@@ -1,11 +1,7 @@
-<!-- ngIf -- Considered a structural directive (can add or remove from the dom)-->
-
-<div class="container">
-  <ngb-alert
-    *ngIf="messageService.message"
-    dismissable="true"
-    type="success"
-    (close)="messageService.message = null"
-    >{{ messageService.message }}</ngb-alert
-  >
+<div class="app-message__alert mx-auto">
+  <!-- ngIf = "structural directive". It can add or remove from the DOM -->
+  <ngb-alert *ngIf="messageService.message"
+    dismissable="true" type="success" (close)="messageService.message = undefined">
+      {{ messageService.message }}
+  </ngb-alert>
 </div>
