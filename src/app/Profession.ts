@@ -1,10 +1,5 @@
-export class Profession {
-  _id: string;
-  observed_occupation: string;
-  service_discipline: string;
-
-  constructor(observed_occupation: string, service_discipline: string) {
-    this.observed_occupation = observed_occupation;
-    this.service_discipline = service_discipline;
-  }
+export interface Profession {
+  _id?: string; // Not technically optional BUT it won't have an ID until the server defines it
+  observedOccupation: string;
+  serviceDiscipline: string;
 }

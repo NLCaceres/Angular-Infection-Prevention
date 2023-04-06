@@ -2,14 +2,14 @@ import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 
 @Injectable({
-  providedIn: "root" // ! No need to put this messageService in provider array
+  providedIn: "root" //? No need to put this messageService in provider array
 })
 export class MessageService {
   messages: string[] = [];
 
   _message = new Subject<string>();
 
-  message: string;
+  message?: string;
 
   constructor() {}
 

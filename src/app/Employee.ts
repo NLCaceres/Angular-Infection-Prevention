@@ -1,7 +1,7 @@
 import { Profession } from "./Profession";
 
-export class Employee {
-  first_name: string;
+export interface Employee {
+  firstName: string;
   surname: string;
   profession: Profession;
 }

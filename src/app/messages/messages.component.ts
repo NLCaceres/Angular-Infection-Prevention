@@ -8,8 +8,7 @@ import { debounceTime } from "rxjs/operators";
   styleUrls: ["./messages.component.scss"]
 })
 export class MessagesComponent implements OnInit {
-  // ! Made it public to bind it to template
-  // ! Angular only binds to public components (not sure what that means)
+  //? MessageService MUST be public, otherwise, the template can't see it
   constructor(public messageService: MessageService) {}
 
   ngOnInit() {
@@ -18,6 +17,6 @@ export class MessagesComponent implements OnInit {
     );
     this.messageService._message
       .pipe(debounceTime(5000))
-      .subscribe(() => (this.messageService.message = null));
+      .subscribe(() => (this.messageService.message = undefined));
   }
 }

@@ -9,14 +9,14 @@ import { NavItem } from "../NavItem";
 export class NavbarComponent implements OnInit {
   public isCollapsed = true;
   navBrand: NavItem = {
-    title: "Infection Control Records"
+    title: "Infection Protection"
   };
 
   constructor() {}
 
   ngOnInit() {}
 
-  toggleMenu() {
-    this.isCollapsed = !this.isCollapsed;
+  toggleMenu(collapse?: boolean) {
+    this.isCollapsed = (collapse) ?? (!this.isCollapsed);
   }
 }

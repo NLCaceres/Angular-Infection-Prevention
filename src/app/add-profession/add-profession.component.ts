@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
 import { ProfessionService } from "../profession.service";
-import { Profession } from "../Profession";
 
 @Component({
   selector: "add-profession",
@@ -19,16 +18,18 @@ export class AddProfessionComponent implements OnInit {
   ngOnInit() {}
 
   add(observedOccupation: string, serviceDiscipline: string): void {
-    // * The following is a small attempt at form validation
+    //* Sanitize form -> trim off whitespace
     observedOccupation = observedOccupation.trim();
     serviceDiscipline = serviceDiscipline.trim();
+
+    //* Validate result is not undefined or null or empty
     if (!observedOccupation || !serviceDiscipline) {
       return;
     }
-    const newProfession = new Profession(observedOccupation, serviceDiscipline);
-    this.professionService
-      .addProfession(newProfession)
-      .subscribe(() => this.goBack());
+
+    const newProfession = { observedOccupation, serviceDiscipline };
+    this.professionService.addProfession(newProfession)
+      .subscribe(() => this.goBack()); //todo Is there another way to goBack() w/out altering history?
   }
 
   goBack(): void {

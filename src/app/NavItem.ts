@@ -1,3 +1,3 @@
-export class NavItem {
+export interface NavItem {
   title: string;
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { Profession } from "../Profession";
 import { ProfessionService } from "../profession.service";
@@ -10,26 +10,21 @@ import { ProfessionService } from "../profession.service";
   styleUrls: ["./sidebar.component.scss"]
 })
 export class SidebarComponent implements OnInit {
-  // ! Wondering why the $? Convention to denote observable
-  public professions: Profession;
-  //private searchTerm = new Subject<string>();
+  public professions: Profession[] = [];
 
   constructor(private professionService: ProfessionService) {}
 
   ngOnInit() {}
 
-  search = (term$: Subject<string>) =>
+  search = (term$: Observable<string>) => //? Why the "$" suffix? Convention denotes an observable
     term$.pipe(
-      debounceTime(300), // ! Wait 300 ms after each keystroke before considering a term
-      distinctUntilChanged(), // ! Ignore new term if same as previous term
-      switchMap((term: string) =>
-        this.professionService.searchProfessions(term)
-      ) // ! Switch to new observable each time the term changes
-      // ! Switch Map preserves order of requests (since they might come back in a different order)
-      // ! Cancelling previous searches will not cancel http requests.
-      // ! HTTP results are discarded once they reach
+      debounceTime(300), //? Wait 300 ms after each keystroke before considering a search term
+      distinctUntilChanged(), //? Ignore new term if same as previous search term
+      switchMap((term: string) => //? switchMap takes in each new observable sent by the service
+        this.professionService.searchProfessions(term) //? Preserving order of HTTP Request results emitted by those observables
+      ) //? BUT it will not cancel http requests, it simply discards the results
     );
   formatter = (profession: Profession) => {
-    return `${profession.observed_occupation} ${profession.service_discipline}`;
+    return `${profession.observedOccupation} ${profession.serviceDiscipline}`;
   };
 }

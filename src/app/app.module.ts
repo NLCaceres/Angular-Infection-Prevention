@@ -35,7 +35,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     FormsModule,
     NgbModule
   ],
-  providers: [], // ! providedIn flag removes need for this array at the moment
+  providers: [], //? Using "providedIn" removes the need to use this array FOR NOW
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -4,12 +4,11 @@ import { ProfessionsComponent } from "./professions/professions.component";
 import { ProfessionDetailComponent } from "./profession-detail/profession-detail.component";
 import { AddProfessionComponent } from "./add-profession/add-profession.component";
 
-// ! By convention, you create this from the start or by command (ng g module app-routing --flat --module=app)
-// * --flat flag puts file in src/app instead of its own folder
-// * --module=app registers it in imports array of AppModule
-// ! By convention, it belongs in src/app
+//? Ang-Router requires this file in src/app, so to add it, use `ng g module app-routing --flat --module=app`
+//? "--flat" puts file in src/app instead of its own folder
+//? "--module=app" registers it in the AppModule's imports array
 
-// ! All Ang routes are two parts, path and component
+//? All Ang routes have two properties, path and component
 const routes: Routes = [
   { path: "professions", component: ProfessionsComponent },
   { path: "profession/:id", component: ProfessionDetailComponent },
@@ -17,7 +16,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)], // ! Adds to ngModule imports array, then configures routes for full availability across app
+  imports: [RouterModule.forRoot(routes)], //? THIS LINE adds the routes to the imports array, activating them across the app
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
