@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, inject } from "@angular/core";
 import { Profession } from "../Profession";
 import { ProfessionService } from "../profession.service";
 import { debounceTime, fromEvent, Subscription } from "rxjs";
@@ -10,9 +10,9 @@ import { debounceTime, fromEvent, Subscription } from "rxjs";
 })
 export class ProfessionsComponent implements OnInit, OnDestroy { //? Just like Java or Swift
   viewWidth = 1024;
+  professionService = inject(ProfessionService); //? Easy, super readable alternative to constructor injection
   professions: Profession[] = []; //? Visible to the HTML template
   resizeSubscription$?: Subscription
-  constructor(private professionService: ProfessionService) {}
 
   //! Lifecycle methods
   ngOnInit() {
