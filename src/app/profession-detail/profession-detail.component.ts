@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
 import { ProfessionService } from "../profession.service";
@@ -10,13 +10,11 @@ import type { Profession } from "../Profession";
   styleUrls: ["./profession-detail.component.scss"]
 })
 export class ProfessionDetailComponent implements OnInit {
-  @Input() profession: Profession = { observedOccupation: "Clinic", serviceDiscipline: "Doctor" };
+  private route = inject(ActivatedRoute); //? Used to check the URL params i.e. "ID" in this component
+  private professionService = inject(ProfessionService);
+  private location = inject(Location); //? Interacts with the browser -> Used to ensure back button works properly
 
-  constructor(
-    private route: ActivatedRoute, //? Checks URL params (ID being the big one here)
-    private professionService: ProfessionService,
-    private location: Location //? Interacts with the browser -> Used to ensure back button works properly
-  ) {}
+  @Input() profession: Profession = { observedOccupation: "Clinic", serviceDiscipline: "Doctor" };
 
   ngOnInit(): void { //? Use this lifecycle method for loading data (let the constructor set simple local vars)
     this.getProfession();

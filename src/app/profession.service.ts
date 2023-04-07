@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
@@ -16,11 +16,8 @@ const httpOptions = {
 export class ProfessionService {
   //* In local dev, must have local version of server running in background to serve up data
   private HOST = environment.apiHost || "http://localhost:8080";
-
-  constructor(
-    private http: HttpClient,
-    private messageService: MessageService
-  ) {}
+  private http = inject(HttpClient);
+  private messageService = inject(MessageService)
 
   getAllProfessions(): Observable<Profession[]> {
     this.messageService._message.next("Loading profession data");

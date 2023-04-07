@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { NavItem } from "../NavItem";
 
 @Component({
@@ -6,15 +6,11 @@ import { NavItem } from "../NavItem";
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.scss"]
 })
-export class NavbarComponent implements OnInit {
-  public isCollapsed = true;
+export class NavbarComponent {
+  isCollapsed = true;
   navBrand: NavItem = {
     title: "Infection Protection"
   };
-
-  constructor() {}
-
-  ngOnInit() {}
 
   toggleMenu(collapse?: boolean) {
     this.isCollapsed = (collapse) ?? (!this.isCollapsed);

@@ -1,5 +1,4 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Component, inject } from "@angular/core";
 import { Location } from "@angular/common";
 import { ProfessionService } from "../profession.service";
 
@@ -8,14 +7,9 @@ import { ProfessionService } from "../profession.service";
   templateUrl: "./add-profession.component.html",
   styleUrls: ["./add-profession.component.scss"]
 })
-export class AddProfessionComponent implements OnInit {
-  constructor(
-    private route: ActivatedRoute,
-    private professionService: ProfessionService,
-    private location: Location
-  ) {}
-
-  ngOnInit() {}
+export class AddProfessionComponent {
+  private professionService = inject(ProfessionService);
+  private location = inject(Location);
 
   add(observedOccupation: string, serviceDiscipline: string): void {
     //* Sanitize form -> trim off whitespace

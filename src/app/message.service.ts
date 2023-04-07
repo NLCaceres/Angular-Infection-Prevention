@@ -6,12 +6,8 @@ import { Subject } from "rxjs";
 })
 export class MessageService {
   messages: string[] = [];
-
   _message = new Subject<string>();
-
   message?: string;
-
-  constructor() {}
 
   // add(message: Subject<string>) {
   //   this.message = message;

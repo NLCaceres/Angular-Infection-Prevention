@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { Profession } from "../Profession";
@@ -9,12 +9,10 @@ import { ProfessionService } from "../profession.service";
   templateUrl: "./sidebar.component.html",
   styleUrls: ["./sidebar.component.scss"]
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
+  private professionService = inject(ProfessionService);
+  
   public professions: Profession[] = [];
-
-  constructor(private professionService: ProfessionService) {}
-
-  ngOnInit() {}
 
   search = (term$: Observable<string>) => //? Why the "$" suffix? Convention denotes an observable
     term$.pipe(

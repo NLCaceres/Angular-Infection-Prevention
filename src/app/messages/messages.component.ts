@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MessageService } from "../message.service";
 import { debounceTime } from "rxjs/operators";
 
@@ -9,7 +9,7 @@ import { debounceTime } from "rxjs/operators";
 })
 export class MessagesComponent implements OnInit {
   //? MessageService MUST be public, otherwise, the template can't see it
-  constructor(public messageService: MessageService) {}
+  messageService = inject(MessageService);
 
   ngOnInit() {
     this.messageService._message.subscribe(
