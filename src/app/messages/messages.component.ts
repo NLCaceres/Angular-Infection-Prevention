@@ -1,6 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core";
 import { MessageService } from "../message.service";
-import { debounceTime } from "rxjs/operators";
 
 @Component({
   selector: "app-messages",
@@ -9,14 +8,13 @@ import { debounceTime } from "rxjs/operators";
 })
 export class MessagesComponent implements OnInit {
   //? MessageService MUST be public, otherwise, the template can't see it
+  message: string = '';
   messageService = inject(MessageService);
 
   ngOnInit() {
-    this.messageService._message.subscribe(
-      message => (this.messageService.message = message)
-    );
-    this.messageService._message
-      .pipe(debounceTime(5000))
-      .subscribe(() => (this.messageService.message = undefined));
+    this.messageService.message$.subscribe(message => {
+      this.message = message
+      setTimeout(() => { this.message = "" }, 5000); //* Will cause alert to disappear
+    });
   }
 }

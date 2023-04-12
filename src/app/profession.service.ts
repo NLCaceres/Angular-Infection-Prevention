@@ -20,14 +20,16 @@ export class ProfessionService {
   private messageService = inject(MessageService)
 
   getAllProfessions(): Observable<Profession[]> {
-    this.messageService._message.next("Loading profession data");
+    this.alert('Loading profession data');
+
     return this.http.get<Profession[]>(`${this.HOST}/professions`).pipe(
-      tap(_ => this.alert("Successfully loaded all profession data")),
-      catchError(this.handleError<Profession[]>("getAllProfessions", []))
+      tap(_ => this.alert('Successfully loaded all profession data')),
+      catchError(this.handleError<Profession[]>('getAllProfessions', []))
     );
   }
   getProfession(id: string): Observable<Profession> {
-    this.messageService._message.next(`Loading profession data with id: ${id}`);
+    this.alert(`Loading profession data with id: ${id}`);
+
     return this.http.get<Profession>(`${this.HOST}/profession/${id}`).pipe(
       tap(_ => this.alert(`Successfully loaded profession with id: ${id}`)),
       catchError(this.handleError<Profession>(`getProfession id=${id}`))
@@ -40,12 +42,12 @@ export class ProfessionService {
     return this.http
       .get<Profession[]>(`${this.HOST}/professions/?label=${term}`)
       .pipe(
-        tap(_ => this.alert(`Found profession matching "${term}"`)),
-        catchError(this.handleError<Profession[]>("searchProfessions", []))
+        tap(_ => this.alert(`Found profession matching '${term}'`)),
+        catchError(this.handleError<Profession[]>('searchProfessions', []))
       );
   }
   addProfession(profession: Profession): Observable<Profession> {
-    this.messageService._message.next("Attempting to add new profession data point");
+    this.alert('Attempting to add new profession data point');
 
     const endpoint = `${this.HOST}/professions/create`;
     return this.http.post<Profession>(endpoint, profession, httpOptions).pipe(
@@ -54,46 +56,48 @@ export class ProfessionService {
           `Adding profession with occupation=${profession.observedOccupation} and discipline=${profession.serviceDiscipline}`
         )
       ),
-      catchError(this.handleError<any>(`addProfession`, profession))
+      catchError(this.handleError<any>('addProfession', profession))
     );
   }
   updateProfession(id: string, profession: Profession): Observable<any> {
-    this.messageService._message.next("Attempting to update this profession data");
+    this.alert('Attempting to update this profession data');
+
     return this.http
       .put<void>(`${this.HOST}/profession/${id}`, profession, httpOptions)
       .pipe(
         tap(_ => this.alert(`Updated profession with the following id: ${profession._id}`)),
-        catchError(this.handleError<any>(`updateProfession`))
+        catchError(this.handleError<any>('updateProfession'))
       );
   }
-  deleteProfession(id: string) {
-    this.messageService._message.next("Attempting to delete this profession data");
+  deleteProfession(id: string) { //? Prefer implicit returns?
+    this.alert('Attempting to delete this profession data');
+
     const endpoint = `${this.HOST}/profession/${id}`;
     return this.http.delete<Profession>(endpoint, httpOptions).pipe(
       tap(_ => this.alert(`Deleted profession with id: ${id}`)),
-      catchError(this.handleError<Profession>(`deleteProfession`))
+      catchError(this.handleError<Profession>('deleteProfession'))
     );
   }
 
   //? Use in catchError() to handle failed HTTP operations w/out crashing the Ang app
-  private handleError<T>(operation = "operation", result?: T) {
+  private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       //todo send error.message to remote logging infrastructure
-      console.error(error); // Logging to console works for now!
+      console.error(error); //* Logging to console works for now!
 
       let alertMessage = `${operation} failed `
       switch (error.name) {
-        case "HttpErrorResponse":
-          alertMessage += "to retrieve a response from server"
+        case 'HttpErrorResponse':
+          alertMessage += 'to retrieve a response from server'
       }
       this.alert(alertMessage);
 
-      return of(result as T); // By returning an empty result, the app keeps running!
+      return of(result as T); //* By returning an empty result, the app keeps running!
     };
   }
 
   //todo Could divide the logging in two, one to print user friendly alerts WHILE the other sends to remote logs for debugging
-  private alert(message: string) { // Alert prints a user friendly message so they have a basic understanding that something went wrong
-    this.messageService._message.next(`Profession: ${message}`);
+  private alert(message: string) { //* Alert prints a user friendly message so they have a basic understanding that something went wrong
+    this.messageService.send(`Profession: ${message}`);
   }
 }

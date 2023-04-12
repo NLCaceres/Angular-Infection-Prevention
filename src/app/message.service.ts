@@ -5,19 +5,9 @@ import { Subject } from "rxjs";
   providedIn: "root" //? No need to put this messageService in provider array
 })
 export class MessageService {
-  messages: string[] = [];
-  _message = new Subject<string>();
-  message?: string;
+  message$ = new Subject<string>();
 
-  // add(message: Subject<string>) {
-  //   this.message = message;
-  // }
-
-  close(message: string) {
-    this.messages.splice(this.messages.indexOf(message), 1);
-  }
-
-  clear() {
-    this.messages = [];
+  send(message: string) {
+    this.message$.next(message)
   }
 }
