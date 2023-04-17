@@ -1,40 +1,44 @@
 <div class="container mt-2">
-  <button type="button" class="btn btn-danger mt-2 mb-4" (click)="goBack()">
+  <button type="button" class="btn btn-danger mt-2 mb-4" (click)="navToProfessionsList()">
     Go Back
   </button>
+
   <div *ngIf="!profession">
     <h3>Unable to retrieve the proper profession</h3>
   </div>
+
   <div *ngIf="profession">
     <h2>
       Would you like to edit this Profession?:
       {{ profession.observedOccupation }} {{ profession.serviceDiscipline }}
     </h2>
-    <div class="my-4">
-      <label>
-        ID:
-        <input [(ngModel)]="profession._id" placeholder="ID" />
-      </label>
-    </div>
-    <div class="my-4">
-      <label>
-        Observed Occupation:
-        <input [(ngModel)]="profession.observedOccupation" placeholder="Observed Occupation" />
-      </label>
-    </div>
-    <div class="my-4">
-      <label>
-        Service Discipline:
-        <input [(ngModel)]="profession.serviceDiscipline" placeholder="Service Discipline" />
-      </label>
-    </div>
-    <span>
-      <button class="btn btn-danger me-4" (click)="update()">
-        Save Changes?
-      </button>
-      <button class="btn btn-danger ms-4" (click)="delete()">
-        Delete this Entry?
-      </button>
-    </span>
+
+    <form #professionForm="ngForm" (ngSubmit)="update()" class="me-5">
+      <div class="my-4">
+        <label for="_id" class="form-label"> ID: </label>
+        <input id="_id" name="_id" [(ngModel)]="profession._id" placeholder="ID" disabled class="form-control">
+      </div>
+
+      <div class="my-4">
+        <label for="observedOccupation" class="form-label"> Observed Occupation: </label>
+        <input id="observedOccupation" name="observedOccupation" [(ngModel)]="profession.observedOccupation" 
+          placeholder="Observed Occupation" class="form-control">
+      </div>
+      
+      <div class="my-4">
+        <label for="serviceDiscipline" class="form-label"> Service Discipline: </label>
+        <input id="serviceDiscipline" name="serviceDiscipline" [(ngModel)]="profession.serviceDiscipline" 
+          placeholder="Service Discipline" class="form-control">
+      </div>
+
+      <span>
+        <button type="submit" class="btn btn-warning me-4" (click)="update()">
+          Save Changes?
+        </button>
+        <button class="btn btn-danger ms-4" (click)="delete()">
+          Delete this Entry?
+        </button>
+      </span>
+    </form>
   </div>
 </div>
