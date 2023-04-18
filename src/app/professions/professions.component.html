@@ -15,8 +15,8 @@
             <a routerLink="/profession/{{ profession._id }}">
               <!-- Ang templates lets you use "|" as a pipe formatter for strings. You can even make custom ones! -->
               <span id="profession{{ i }}">
-                {{ profession.observedOccupation | uppercase }}
-                {{ profession.serviceDiscipline }}
+                {{ profession.observedOccupation | titlecase }}
+                {{ profession.serviceDiscipline | titlecase }}
               </span>
             </a>
           </li>
