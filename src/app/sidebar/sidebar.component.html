@@ -1,24 +1,21 @@
-<div id="filterGroup">
+<div>
   <h3>Filter</h3>
-  <div class="input-group" id="searchBarContainer">
+
+  <div class="input-group">
     <div class="input-group-prepend">
       <span class="input-group-text">@</span>
     </div>
-    <ng-template #resultTemplate let-r="result" let-t="term">
-      <ngb-highlight
-        [result]="r.label"
-        [term]="t"
-        routerLink="/profession/{{ r._id }}"
-      >
+
+    <!-- 'rt' template variable used in [resultTemplate] below to let this section be the results display -->
+    <ng-template #rt let-r="result" let-t="term">
+      <!-- 'let-r' assigns each 'result' var to an 'r' var, same for 'term' -->
+      <!-- The [result] + [term] directives help highlight the 'result' characters that match with the 'term' chars -->
+      <!-- i.e. ['foobar', 'barfoo'] w/ term = 'foo' then 'FOObar' and 'barFOO' will get highlighted -->
+      <ngb-highlight [result]="r.label" [term]="t" routerLink="/profession/{{ r._id }}">
       </ngb-highlight>
     </ng-template>
-    <input
-      #searchBox
-      type="text"
-      class="form-control"
-      [(ngModel)]="professions"
-      [ngbTypeahead]="search"
-      [resultTemplate]="resultTemplate"
-    />
+
+    <!-- ngModel seemingly isn't needed for ngTypeahead to work. Only needed if the linked var is used elsewhere in the template -->
+    <input type="text" class="form-control" [ngbTypeahead]="search" [resultTemplate]="rt" [resultFormatter]="formatter" />
   </div>
 </div>
