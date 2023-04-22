@@ -1,23 +1,29 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-
-import { FormsModule } from "@angular/forms"; // Enables form modification of models
-
-// Do the same for your future service that will handle routes
-import { HttpClientModule } from "@angular/common/http";
-
-import { AppRoutingModule } from "./app-routing.module";
-import { AppComponent } from "./app.component";
-import { ReportsComponent } from "./reports/reports.component";
-import { NavbarComponent } from "./navbar/navbar.component";
-import { ProfessionsComponent } from "./professions/professions.component";
-import { ProfessionDetailComponent } from "./profession-detail/profession-detail.component";
-import { MessagesComponent } from "./messages/messages.component";
-import { AddProfessionComponent } from "./add-profession/add-profession.component";
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms'; //* Enables form modification of models
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; //* Ng Boostrap
+//! Components for declarations
+import { AppComponent } from './app.component';
+import { ReportsComponent } from './reports/reports.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { ProfessionsComponent } from './professions/professions.component';
+import { ProfessionDetailComponent } from './profession-detail/profession-detail.component';
+import { MessagesComponent } from './messages/messages.component';
+import { AddProfessionComponent } from './add-profession/add-profession.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
+  imports: [
+    BrowserModule,
+    CommonModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    NgbModule
+  ],
   declarations: [
     AppComponent,
     ReportsComponent,
@@ -27,13 +33,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     MessagesComponent,
     AddProfessionComponent,
     SidebarComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    NgbModule
   ],
   providers: [], //? Using "providedIn" removes the need to use this array FOR NOW
   bootstrap: [AppComponent]
