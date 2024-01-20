@@ -2,18 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
-    "types": [
-      "jasmine",
-      "node",
-      "@angular/localize"
-    ]
+    "types": ["jest", "node", "@angular/localize"]
   },
-  "files": [
-    "test.ts",
-    "polyfills.ts"
-  ],
-  "include": [
-    "**/*.spec.ts",
-    "**/*.d.ts"
-  ]
+  "files": ["test.ts", "polyfills.ts"], // Test.ts is not actually necessary BUT keep it for now
+  "include": ["**/*.spec.ts", "**/*.d.ts"]
 }
