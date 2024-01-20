@@ -2,7 +2,8 @@
   "name": "ang-records",
   "version": "0.0.0",
   "engines": {
-    "node": "16.18.1"
+    "node": "20.9.0",
+    "pnpm": "8.14.1"
   },
   "scripts": {
     "ng": "ng",
