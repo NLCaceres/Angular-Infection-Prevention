@@ -12,16 +12,18 @@ import { FormsModule } from '@angular/forms';
 describe('ProfessionDetailComponent', () => {
   let component: ProfessionDetailComponent;
   let fixture: ComponentFixture<ProfessionDetailComponent>;
-  let serviceSpy: jasmine.SpyObj<ProfessionService>;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let serviceMock: Record<"getProfession" | "updateProfession" | "deleteProfession", ReturnType<typeof jest.fn>>;
+  let routerMock: jest.Mock;
 
   beforeEach(async () => {
+    serviceMock = { getProfession: jest.fn(), updateProfession: jest.fn(), deleteProfession: jest.fn() };
+    routerMock = jest.fn();
     await TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule, FormsModule ],
       declarations: [ ProfessionDetailComponent ],
       providers: [
-        { provide: ProfessionService, useValue: jasmine.createSpyObj('ProfessionService', ['getProfession', 'updateProfession', 'deleteProfession']) },
-        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigate']) },
+        { provide: ProfessionService, useValue: serviceMock },
+        { provide: Router, useValue: { navigate: routerMock } },
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => '1' } }} } 
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -30,27 +32,28 @@ describe('ProfessionDetailComponent', () => {
     fixture = TestBed.createComponent(ProfessionDetailComponent);
     component = fixture.componentInstance;
     
-    serviceSpy = TestBed.inject(ProfessionService) as jasmine.SpyObj<ProfessionService>;
-    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    TestBed.inject(ProfessionService);
+    TestBed.inject(Router);
   });
 
   it('should create the Profession Detail page', () => {
-    serviceSpy.getProfession.and.returnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
+    serviceMock.getProfession.mockReturnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
     fixture.detectChanges(); //* Start up the component, running ngOnInit()
     expect(component).toBeTruthy();
-    expect(routerSpy).toBeTruthy();
-    expect(serviceSpy).toBeTruthy();
+    expect(routerMock).toBeTruthy();
+    expect(serviceMock).toBeTruthy();
   });
   it('should run router.navigate() after the back button is clicked', () => {
-    serviceSpy.getProfession.and.returnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
+    serviceMock.getProfession.mockReturnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
     fixture.detectChanges();
     
     const backButton = fixture.debugElement.query(By.css('.container > button'));
     backButton.triggerEventHandler('click');
-    expect(routerSpy.navigate).toHaveBeenCalledOnceWith(['professions']);
+    expect(routerMock).toHaveBeenCalledTimes(1);
+    expect(routerMock).toHaveBeenCalledWith(['professions']);
   })
   it('should fetch the profession on init', fakeAsync(() => {
-    serviceSpy.getProfession.and.returnValue(of({ observedOccupation: 'Foobar', serviceDiscipline: 'Barfoo' }));
+    serviceMock.getProfession.mockReturnValue(of({ observedOccupation: 'Foobar', serviceDiscipline: 'Barfoo' }));
     fixture.detectChanges();
     tick();
 
@@ -65,16 +68,16 @@ describe('ProfessionDetailComponent', () => {
   }))
   it('should render an error message if no profession is fetched', () => {
     const returnVal: any = undefined; //* Casting 'undefined' to 'any' or 'unknown' lets me to cast it to Profession below
-    serviceSpy.getProfession.and.returnValue(of(returnVal as Profession)); //* So I can imitate the professionService error handler returning undefined
+    serviceMock.getProfession.mockReturnValue(of(returnVal as Profession)); //* So I can imitate the professionService error handler returning undefined
     fixture.detectChanges();
 
     const errorHeader = fixture.debugElement.query(By.css('div > h3')).nativeElement;
     expect(errorHeader.textContent).toBe('Unable to retrieve the proper profession');
   })
   it('should call updateProfession() and router.navigate() after pressing the update button', fakeAsync(() => {
-    serviceSpy.getProfession.and.returnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
+    serviceMock.getProfession.mockReturnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
     //* If updateProfession()'s returnVal of() stream is empty, the component's subscribe() would never run WHICH
-    serviceSpy.updateProfession.and.returnValue(of({ })); //* fails the test since router.navigate() inside wouldn't be run
+    serviceMock.updateProfession.mockReturnValue(of({ })); //* fails the test since router.navigate() inside wouldn't be run
     fixture.detectChanges();
     tick();
 
@@ -87,17 +90,24 @@ describe('ProfessionDetailComponent', () => {
     disciplineInput.dispatchEvent(new Event('input'));
 
     fixture.debugElement.query(By.css('span > button.btn.btn-warning')).triggerEventHandler('click');
-    expect(serviceSpy.updateProfession).toHaveBeenCalledOnceWith('1', { observedOccupation: 'Hospital', serviceDiscipline: 'Nurse' });
-    expect(routerSpy.navigate).toHaveBeenCalledOnceWith(['professions']);
+
+    expect(serviceMock.updateProfession).toHaveBeenCalledTimes(1);
+    expect(serviceMock.updateProfession).toHaveBeenCalledWith('1', { observedOccupation: 'Hospital', serviceDiscipline: 'Nurse' });
+
+    expect(routerMock).toHaveBeenCalledTimes(1);
+    expect(routerMock).toHaveBeenCalledWith(['professions']);
   }))
   it('should call delete() and router.navigate() after pressing the delete button', fakeAsync(() => {
-    serviceSpy.getProfession.and.returnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
-    serviceSpy.deleteProfession.and.returnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
+    serviceMock.getProfession.mockReturnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
+    serviceMock.deleteProfession.mockReturnValue(of({ observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' }));
     fixture.detectChanges();
     tick();
 
     fixture.debugElement.query(By.css('span > button.btn.btn-danger')).triggerEventHandler('click');
-    expect(serviceSpy.deleteProfession).toHaveBeenCalledOnceWith('1');
-    expect(routerSpy.navigate).toHaveBeenCalledOnceWith(['professions']);
+    expect(serviceMock.deleteProfession).toHaveBeenCalledTimes(1);
+    expect(serviceMock.deleteProfession).toHaveBeenCalledWith('1');
+    
+    expect(routerMock).toHaveBeenCalledTimes(1);
+    expect(routerMock).toHaveBeenCalledWith(['professions']);
   }))
 });

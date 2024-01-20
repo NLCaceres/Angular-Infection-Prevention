@@ -11,38 +11,38 @@ import { RouterTestingModule } from '@angular/router/testing';
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
-  let serviceSpy: jasmine.SpyObj<ProfessionService>;
+  let serviceMock: jest.Mock;
 
   beforeEach(async () => {
+    serviceMock = jest.fn()
     await TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule, RouterTestingModule, //? Enables routerLink props w/out requiring any injections
         FormsModule, NgbTypeaheadModule ], //? NgbTypeahead declares relevant components for testing  
       declarations: [ SidebarComponent ],
-      providers: [ { provide: ProfessionService, useValue: jasmine.createSpyObj('ProfessionService', ['searchProfessions']) } ],
+      providers: [ { provide: ProfessionService, useValue: { searchProfessions: serviceMock } } ],
       
     }).compileComponents();
     
     fixture = TestBed.createComponent(SidebarComponent);
     component = fixture.componentInstance;
 
-    serviceSpy = TestBed.inject(ProfessionService) as jasmine.SpyObj<ProfessionService>;
+    TestBed.inject(ProfessionService)
 
     fixture.detectChanges();
   });
 
   it('should create a sidebar component', () => {
     expect(component).toBeTruthy(); //* Tough to say if toBeDefined() or toBeTruthy() is better
-    expect(serviceSpy).toBeDefined(); //* Truthy would probably only ever fail if the value had to be 0 or false
+    expect(serviceMock).toBeDefined(); //* Truthy would probably only ever fail if the value had to be 0 or false
   });
   it('should format the profession occupation and discipline into a readable string', () => {
     const professionName = component.formatter({ observedOccupation: 'Foobar', serviceDiscipline: 'Barfoo' });
     expect(professionName).toBe('Foobar Barfoo');
   })
   it('should use any search terms input to make filtered requests from the server', fakeAsync(() => {
-    serviceSpy.searchProfessions.and.returnValues(
-      of([{ observedOccupation: 'Foobar', serviceDiscipline: 'Barfoo'}]), 
-      of([{ observedOccupation: 'Fizz', serviceDiscipline: 'Buzz'}, { observedOccupation: 'Faz', serviceDiscipline: 'Baz' }]),
-    );
+    serviceMock
+      .mockReturnValueOnce(of([{ observedOccupation: 'Foobar', serviceDiscipline: 'Barfoo'}]))
+      .mockReturnValueOnce(of([{ observedOccupation: 'Fizz', serviceDiscipline: 'Buzz'}, { observedOccupation: 'Faz', serviceDiscipline: 'Baz' }]));
     component.search(of('foobar')).subscribe(list => {
       expect(list).toEqual([{ observedOccupation: 'Foobar', serviceDiscipline: 'Barfoo' }]);
     });
@@ -53,7 +53,7 @@ describe('SidebarComponent', () => {
     fixture.detectChanges();
     tick(350); //* Must elapse the debounce period to ensure ngb-highlight list appears under searchbar
 
-    expect(fixture.debugElement.queryAll(By.css('ngb-highlight'))).toHaveSize(2);
+    expect(fixture.debugElement.queryAll(By.css('ngb-highlight'))).toHaveLength(2);
     flush(); //* Must clear async tasks to pass test
   }))
 });

@@ -12,10 +12,9 @@ describe('MessagesComponent', () => {
   beforeEach(async () => { //? Could use waitForAsync BUT then setup would have to be divided into 2 beforeEach calls
     await TestBed.configureTestingModule({ 
       declarations: [ MessagesComponent ], //? Declarations are the unit-tested component
-      providers: [ MessageService ], //? Could use a jasmineSpy on messageService BUT no need since the component just subscribes to the observable
+      providers: [ MessageService ], //? Could use a Mock on messageService BUT no need since the component just subscribes to the observable
       schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents(); //? Ensures the component test works in non-CLI environment, loading in external files like templates & styles
-    //* For an example of a jasmineSpy'd messageService, see "profession.service.spec.ts"
 
     fixture = TestBed.createComponent(MessagesComponent); //* Create the component
     component = fixture.componentInstance; //* Grab a reference to the component class instance
