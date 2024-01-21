@@ -8,12 +8,23 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
+    "serve": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 1 Firefox version",
+    "last 2 Edge major versions",
+    "last 2 Safari major versions",
+    "last 2 iOS major versions", 
+    "Firefox ESR"
+  ],
   "dependencies": {
     "@angular/animations": "^17.1.0",
     "@angular/common": "^17.1.0",
@@ -38,6 +49,7 @@
     "@angular-devkit/build-angular": "^17.1.0",
     "@angular/cli": "^17.1.0",
     "@angular/compiler-cli": "^17.1.0",
+    "@cypress/schematic": "2.5.1",
     "@types/jest": "^29.5.11",
     "@types/node": "^16.18.23",
     "codelyzer": "~6.0.0",
@@ -46,6 +58,7 @@
     "protractor": "~7.0.0",
     "ts-node": "~10.9.0",
     "tslint": "~6.1.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "cypress": "latest"
   }
 }
