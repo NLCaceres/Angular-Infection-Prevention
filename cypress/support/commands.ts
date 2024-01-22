@@ -1,22 +1,12 @@
-// ***********************************************
-// This example namespace declaration will help
-// with Intellisense and code completion in your
-// IDE or Text Editor.
-// ***********************************************
-// declare namespace Cypress {
-//   interface Chainable<Subject = any> {
-//     customCommand(param: any): typeof customCommand;
-//   }
-// }
-//
-// function customCommand(param: any): void {
-//   console.warn(param);
-// }
-//
-// NOTE: You can use it like so:
-// Cypress.Commands.add('customCommand', customCommand);
-//
-// ***********************************************
+//! This file is used to add functionality for ease of use in Cypress E2E tests
+
+//? Most commands can be written like this after also adding their type definitions to `cypress/global.d.ts`
+Cypress.Commands.add("dataCy", (value) => {
+  return cy.get(`[data-cy=${value}]`);
+});
+
+
+//! For more info, check out the comments below AND for concrete examples check out https://github.com/cypress-io/cypress-realworld-app/tree/develop/cypress
 // This example commands.js shows you how to
 // create various custom commands and overwrite
 // existing commands.
