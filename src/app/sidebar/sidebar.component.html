@@ -9,13 +9,14 @@
     <!-- 'rt' template variable used in [resultTemplate] below to let this section be the results display -->
     <ng-template #rt let-r="result" let-t="term">
       <!-- 'let-r' assigns each 'result' var to an 'r' var, same for 'term' -->
-      <!-- The [result] + [term] directives help highlight the 'result' characters that match with the 'term' chars -->
-      <!-- i.e. ['foobar', 'barfoo'] w/ term = 'foo' then 'FOObar' and 'barFOO' will get highlighted -->
-      <ngb-highlight [result]="r.label" [term]="t" routerLink="/profession/{{ r._id }}">
+      <!-- The [result] + [term] directives BOLDS the 'result' characters that match 'term' chars -->
+      <!-- Ex: If results = ['foobar', 'barfoo'] for term = 'foo' then 'FOObar' and 'barFOO' get bolded -->
+      <!-- When a user hovers over any term/button, that term gains ".active" which causes it to become highlighted-->
+      <ngb-highlight [result]="r.observedOccupation + ' ' + r.serviceDiscipline" [term]="t" routerLink="/profession/{{ r._id }}">
       </ngb-highlight>
     </ng-template>
 
     <!-- ngModel seemingly isn't needed for ngTypeahead to work. Only needed if the linked var is used elsewhere in the template -->
-    <input type="text" class="form-control" [ngbTypeahead]="search" [resultTemplate]="rt" [resultFormatter]="formatter" />
+    <input data-cy="searchBar" type="text" class="form-control" [ngbTypeahead]="search" [resultTemplate]="rt" [resultFormatter]="formatter" />
   </div>
 </div>
