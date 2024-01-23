@@ -10,7 +10,7 @@
           <button class="btn btn-danger">Add Profession</button>
         </a>
     
-        <ul class="mt-3">
+        <ul class="mt-3" data-cy="professionList">
           <li *ngFor="let profession of professions; let i = index">
             <a routerLink="/profession/{{ profession._id }}">
               <!-- Ang templates lets you use "|" as a pipe formatter for strings. You can even make custom ones! -->
