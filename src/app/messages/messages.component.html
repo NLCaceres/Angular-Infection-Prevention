@@ -1,6 +1,6 @@
 <div class="app-message__alert mx-auto">
   <!-- ngIf = "structural directive". It can add or remove from the DOM -->
-  <ngb-alert *ngIf="message && message.trim() != '' && message.length > 0" dismissable="true" type="success" (close)="message = '' ">
+  <ngb-alert *ngIf="message && message.trim() != '' && message.length > 0" dismissable="true" type="success" (closed)="message = ''">
     {{ message }}
   </ngb-alert>
 </div>
