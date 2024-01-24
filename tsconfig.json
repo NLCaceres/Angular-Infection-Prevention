@@ -21,13 +21,10 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedParameters": true,
-    "strict": true,
-    
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "strict": true
   },
   "angularCompilerOptions": {
     "strictTemplates": true
-  }
+  },
+  "exclude": ["./cypress.config.ts"]
 }
