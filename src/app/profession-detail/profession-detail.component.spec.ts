@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
-import { Profession } from 'app/Profession';
 import { FormsModule } from '@angular/forms';
 
 describe('ProfessionDetailComponent', () => {
@@ -67,8 +66,7 @@ describe('ProfessionDetailComponent', () => {
     expect(disciplineInput.value).toBe('Barfoo');
   }))
   it('should render an error message if no profession is fetched', () => {
-    const returnVal: any = undefined; //* Casting 'undefined' to 'any' or 'unknown' lets me to cast it to Profession below
-    serviceMock.getProfession.mockReturnValue(of(returnVal as Profession)); //* So I can imitate the professionService error handler returning undefined
+    serviceMock.getProfession.mockReturnValue(of(undefined));
     fixture.detectChanges();
 
     const errorHeader = fixture.debugElement.query(By.css('div > h3')).nativeElement;
@@ -89,7 +87,7 @@ describe('ProfessionDetailComponent', () => {
     occupationInput.dispatchEvent(new Event('input')); //* Specifically an 'input' event!
     disciplineInput.dispatchEvent(new Event('input'));
 
-    fixture.debugElement.query(By.css('span > button.btn.btn-warning')).triggerEventHandler('click');
+    fixture.debugElement.query(By.css('span > button.btn.btn-warning')).nativeElement.click(); //? Submit event bubbles up to parent form and trigger update()
 
     expect(serviceMock.updateProfession).toHaveBeenCalledTimes(1);
     expect(serviceMock.updateProfession).toHaveBeenCalledWith('1', { observedOccupation: 'Hospital', serviceDiscipline: 'Nurse' });
