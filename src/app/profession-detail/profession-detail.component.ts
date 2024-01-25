@@ -14,6 +14,7 @@ export class ProfessionDetailComponent implements OnInit {
   private professionService = inject(ProfessionService);
 
   profession: Profession = { observedOccupation: 'Clinic', serviceDiscipline: 'Doctor' };
+  errorOccurred: boolean = false;
 
   ngOnInit(): void { //? Use this lifecycle method for loading data. Let inject() set class properties above
     this.getProfession();
@@ -23,7 +24,8 @@ export class ProfessionDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     //? W/out subscribe, service will not make a request. W/out its callback, nothing will happen with the returned data
     this.professionService.getProfession(id).subscribe(profession => {
-      this.profession = profession;
+      if (profession) { this.profession = profession }
+      else { this.errorOccurred = true }
     });
   }
   update(): void {
