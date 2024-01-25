@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Observable, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { Profession } from '../Profession';
 import { ProfessionService } from '../profession.service';
 
