@@ -123,53 +123,6 @@
           }
         }
       }
-    },
-    "ang-records-e2e": {
-      "root": "e2e/",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
-        "e2e": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "ang-records-e2e:serve",
-            "watch": true,
-            "headless": false
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ang-records-e2e:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "",
-            "exclude": ["**/node_modules/**"]
-          }
-        },
-        "cypress-run": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "ang-records-e2e:serve",
-            "configFile": "e2e//cypress.config.ts"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ang-records-e2e:serve:production"
-            }
-          }
-        },
-        "cypress-open": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "watch": true,
-            "headless": false,
-            "configFile": "e2e//cypress.config.ts"
-          }
-        }
-      }
     }
   }
 }
