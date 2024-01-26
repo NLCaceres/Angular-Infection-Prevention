@@ -9,17 +9,33 @@ describe("Profession Pages Testing", () => {
   })
 
   //! Professions ListView
-  it("Renders 'Professions' List Page with two professions", () => {
-    cy.get("h2").contains("Hospital Professions");
-    cy.url().should("include", "/professions");
-    cy.dataCy("professionList").find("li").should("have.length", 2); //? Grab the "ul" parent to "find" its "li" children and count them
-  })
-  it("Render error message when unable to retrieve list from server", () => {
-    cy.intercept("GET", "http://localhost:8080/professions", { forceNetworkError: true }).as('err')
-    cy.visit("/professions");
-    //? Testing for Disappearance in Cypress: 1. Test the elem is in the View. 2. Test (and wait) for it to be removed from the View
-    cy.contains("getAllProfessions failed to retrieve a response from server").should("exist");
-    cy.contains("getAllProfessions failed to retrieve a response from server", { timeout: 5100 }).should("not.exist");
+  context("Professions List Page", () => {
+    it("Renders 'Professions' List Page with two professions", () => {
+      cy.get("h2").contains("Hospital Professions");
+      cy.url().should("include", "/professions");
+      cy.dataCy("professionList").find("li").should("have.length", 2); //? Grab the "ul" parent to "find" its "li" children and count them
+    })
+    context("Render error message if unable to retrieve list due to", () => {
+      it("Unknown issue", () => {
+        cy.intercept("GET", "http://localhost:8080/professions", { forceNetworkError: true }).as("err");
+        cy.visit("/professions");
+        //? Testing for Disappearance in Cypress: 1. Test the elem is in the View. 2. Test (and wait) for it to be removed from the View
+        cy.contains("Getting the list of professions failed due to an unknown issue").should("exist");
+        cy.contains("Getting the list of professions failed due to an unknown issue", { timeout: 5100 }).should("not.exist");
+      })
+      it("Server issue", () => {
+        cy.intercept("GET", "http://localhost:8080/professions", { statusCode: 503 }).as("err");
+        cy.visit("/professions");
+        cy.contains("Getting the list of professions failed due to a server issue").should("exist");
+        cy.contains("Getting the list of professions failed due to a server issue", { timeout: 5100 }).should("not.exist");
+      })
+      it("Client Request issue", () => {
+        cy.intercept("GET", "http://localhost:8080/professions", { statusCode: 404 }).as("err");
+        cy.visit("/professions");
+        cy.contains("Getting the list of professions failed due to an issue with your request").should("exist");
+        cy.contains("Getting the list of professions failed due to an issue with your request", { timeout: 5100 }).should("not.exist");
+      })
+    })
   })
 
   //! Add Profession page
@@ -161,8 +177,8 @@ describe("Profession Pages Testing", () => {
       // cy.get("#serviceDiscipline").should("have.value", "Doctor");
       //? Cypress just catches the page's error messaging
       cy.get("h3").contains("Unable to retrieve the proper profession").should("exist");
-      cy.contains("getProfession id=123 failed").should("exist");
-      cy.contains("getProfession id=123 failed", { timeout: 5100 }).should("not.exist");
+      cy.contains("Getting profession info with id: 123 failed").should("exist");
+      cy.contains("Getting profession info with id: 123 failed", { timeout: 5100 }).should("not.exist");
   
       cy.get("button").contains("Go Back").click();
     
@@ -173,8 +189,8 @@ describe("Profession Pages Testing", () => {
       cy.dataCy("searchBar").type("Bar"); //? Example of custom command usage which replace: `get("[data-cy='observedOccupation']")` calls
       cy.dataCy("searchBar").should("have.value", "Bar");
   
-      cy.contains("searchProfessions failed to retrieve a response from server").should("exist");
-      cy.contains("searchProfessions failed to retrieve a response from server", { timeout: 5100 }).should("not.exist");
+      cy.contains("Looking up the profession failed due to an unknown issue").should("exist");
+      cy.contains("Looking up the profession failed due to an unknown issue", { timeout: 5100 }).should("not.exist");
     })
   })
 })
