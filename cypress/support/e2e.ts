@@ -13,4 +13,4 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-import './commands'; //? Ensures commands.ts is properly loaded in all tests
+import "./commands"; //? Ensures commands.ts is properly loaded in all tests
