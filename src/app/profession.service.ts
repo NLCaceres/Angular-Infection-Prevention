@@ -16,13 +16,13 @@ export class ProfessionService {
   //* In local dev, must have local version of server running in background to serve up data
   private HOST = environment.apiHost || "http://localhost:8080";
   private http = inject(HttpClient);
-  private messageService = inject(MessageService)
+  private messageService = inject(MessageService);
 
   getAllProfessions() {
-    this.alert('Loading profession data');
+    this.alert("Loading profession data");
 
     return this.http.get<Profession[]>(`${this.HOST}/professions`).pipe(
-      tap({ next: () => this.alert('Successfully loaded all profession data') }),
+      tap({ next: () => this.alert("Successfully loaded all profession data") }),
       catchError(this.handleHttpError<Profession[]>("Getting the list of professions", []))
     );
   }
@@ -45,7 +45,7 @@ export class ProfessionService {
   }
   //TODO: Check what's considered normal/abnormal for add/update/delete to get from the server so catchError can send a proper fallback for the view to handle
   addProfession(profession: Profession) {
-    this.alert('Attempting to add new profession data point');
+    this.alert("Attempting to add new profession data point");
 
     const endpoint = `${this.HOST}/professions/create`;
     return this.http.post<Profession>(endpoint, profession, httpOptions).pipe(
@@ -54,7 +54,7 @@ export class ProfessionService {
     );
   }
   updateProfession(id: string, profession: Profession) {
-    this.alert('Attempting to update this profession data');
+    this.alert("Attempting to update this profession data");
 
     return this.http.put<void>(`${this.HOST}/profession/${id}`, profession, httpOptions).pipe(
       tap({ next: () => this.alert(`Updated profession with id: ${profession._id}`) }),
@@ -62,7 +62,7 @@ export class ProfessionService {
     );
   }
   deleteProfession(id: string) {
-    this.alert('Attempting to delete this profession data');
+    this.alert("Attempting to delete this profession data");
 
     const endpoint = `${this.HOST}/profession/${id}`;
     return this.http.delete<Profession>(endpoint, httpOptions).pipe(
@@ -72,21 +72,21 @@ export class ProfessionService {
   }
 
   //? Use in catchError() to handle failed HTTP operations w/out crashing the app PLUS return a fallback value if needed!
-  private handleHttpError<T = undefined>(operation = 'operation', fallbackVal?: T) {
+  private handleHttpError<T = undefined>(operation = "operation", fallbackVal?: T) {
     //? Angular HttpClient ONLY defines HttpErrorResponse as a wrapper for all errors (I THINK), so it should be safe to coerce the caughtError into that type
     return (error: HttpErrorResponse): Observable<T> => { //? PLUS it might make this func reusable across the app
       console.error(error); //* Logging to console works for now!
 
       //? Since Angular/Http wraps its errors in HttpErrorResponse, it should also be safe to use status to determine a good alert message to show the user
       let alertMessage = `Sorry! ${operation} failed due to `;
-      if (error.status >= 500) { 
-        alertMessage += 'a server issue';
+      if (error.status >= 500) {
+        alertMessage += "a server issue";
       }
       else if (error.status >= 400) {
-        alertMessage += 'an issue with your request';
+        alertMessage += "an issue with your request";
       }
       else {
-        alertMessage += 'an unknown issue';
+        alertMessage += "an unknown issue";
       }
       this.alert(alertMessage);
       //todo Could divide the logging in two, one to print user friendly alerts WHILE the other sends to remote logs for debugging

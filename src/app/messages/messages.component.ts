@@ -8,13 +8,13 @@ import { MessageService } from "../message.service";
 })
 export class MessagesComponent implements OnInit {
   //? MessageService MUST be public, otherwise, the template can't see it
-  message: string = '';
+  message: string = "";
   messageService = inject(MessageService);
 
   ngOnInit() {
     this.messageService.message$.subscribe(message => {
-      this.message = message
-      setTimeout(() => { this.message = "" }, 5000); //* Will cause alert to disappear
+      this.message = message;
+      setTimeout(() => { this.message = ""; }, 5000); //* Will cause alert to disappear
     });
   }
 }

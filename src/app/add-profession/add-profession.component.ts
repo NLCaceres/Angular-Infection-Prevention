@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
-import { ProfessionService } from '../profession.service';
-import { Router } from '@angular/router';
+import { Component, inject } from "@angular/core";
+import { ProfessionService } from "../profession.service";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'add-profession',
-  templateUrl: './add-profession.component.html',
-  styleUrls: ['./add-profession.component.scss']
+  selector: "add-profession",
+  templateUrl: "./add-profession.component.html",
+  styleUrls: ["./add-profession.component.scss"]
 })
 export class AddProfessionComponent {
   private professionService = inject(ProfessionService);
@@ -27,6 +27,6 @@ export class AddProfessionComponent {
   }
 
   navToProfessionList() { //? navigate() adds to history w/ path based on base URL i.e. localhost:1234/professions
-    this.router.navigate(['professions']); //? No leading slash needed for items in the url commands array
+    this.router.navigate(["professions"]); //? No leading slash needed for items in the url commands array
   } //? Its usage is like the [routerLink] directive used in templates' <a> and <button> elements
 }

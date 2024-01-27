@@ -8,6 +8,6 @@ export class MessageService {
   message$ = new Subject<string>();
 
   send(message: string) {
-    this.message$.next(message)
+    this.message$.next(message);
   }
 }
