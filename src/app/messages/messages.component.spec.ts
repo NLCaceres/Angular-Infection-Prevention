@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MessagesComponent } from './messages.component';
-import { MessageService } from 'app/message.service';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { By } from '@angular/platform-browser';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { MessagesComponent } from "./messages.component";
+import { MessageService } from "app/message.service";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { By } from "@angular/platform-browser";
 
-describe('MessagesComponent', () => {
+describe("MessagesComponent", () => {
   let component: MessagesComponent;
   let service: MessageService;
   let fixture: ComponentFixture<MessagesComponent>;
 
   beforeEach(async () => { //? Could use waitForAsync BUT then setup would have to be divided into 2 beforeEach calls
-    await TestBed.configureTestingModule({ 
+    await TestBed.configureTestingModule({
       declarations: [ MessagesComponent ], //? Declarations are the unit-tested component
       providers: [ MessageService ], //? Could use a Mock on messageService BUT no need since the component just subscribes to the observable
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -24,19 +24,19 @@ describe('MessagesComponent', () => {
     fixture.detectChanges(); //? This func can be reused to load in future changes
   });
 
-  it('should create an App-wide Messages Alert', () => {
+  it("should create an App-wide Messages Alert", () => {
     expect(component).toBeTruthy();
     expect(service).toBeTruthy(); //* Service should be injected too
   });
-  it('should hide on start and show only when it has a message', () => {
-    const alertParent = fixture.debugElement.query(By.css('.app-message__alert'));
+  it("should hide on start and show only when it has a message", () => {
+    const alertParent = fixture.debugElement.query(By.css(".app-message__alert"));
     expect(alertParent).toBeTruthy();
     expect(alertParent.children.length).toBe(0); //* No alert message element
 
     component.message = " ";
     fixture.detectChanges();
     //? The following query SHOULD return the exact same element found in the alertParent var BUT just in case query again
-    const refreshedParent = fixture.debugElement.query(By.css('.app-message__alert'));
+    const refreshedParent = fixture.debugElement.query(By.css(".app-message__alert"));
     expect(refreshedParent).toBeTruthy();
     expect(refreshedParent.children.length).toBe(0);
 
@@ -45,5 +45,5 @@ describe('MessagesComponent', () => {
     expect(refreshedParent).toBeTruthy(); //? Following is proof refreshedParent remains the same but now with a newly rendered child -> 'ngb-alert'
     expect(refreshedParent.children.length).toBe(1); //? NativeElement doesn't always work due to its dependency on the browser
     expect(refreshedParent.children[0].nativeElement.textContent.trim()).toBe("Hello world!"); //? So this 1 line may be a bit finicky
-  })
+  });
 });

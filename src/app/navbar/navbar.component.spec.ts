@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NavbarComponent } from './navbar.component';
-import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { NavbarComponent } from "./navbar.component";
+import { RouterTestingModule } from "@angular/router/testing";
+import { By } from "@angular/platform-browser";
+import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
 
-describe('Navigation Bar Component', () => {
+describe("Navigation Bar Component", () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
 
@@ -19,18 +19,18 @@ describe('Navigation Bar Component', () => {
     fixture.detectChanges();
   });
 
-  it('should create a Navbar component with a title property in its brand', () => {
+  it("should create a Navbar component with a title property in its brand", () => {
     expect(component).toBeTruthy();
 
-    const navbarBrand = fixture.debugElement.query(By.css('.navbar-brand'));
+    const navbarBrand = fixture.debugElement.query(By.css(".navbar-brand"));
     expect(navbarBrand).toBeDefined();
-    expect(navbarBrand.nativeElement.textContent).toBe('Infection Protection');
+    expect(navbarBrand.nativeElement.textContent).toBe("Infection Protection");
 
-    navbarBrand.nativeElement.textContent = 'Foobar';
+    navbarBrand.nativeElement.textContent = "Foobar";
     fixture.detectChanges();
-    expect(navbarBrand.nativeElement.textContent).toBe('Foobar');
+    expect(navbarBrand.nativeElement.textContent).toBe("Foobar");
   });
-  it('should use toggleMenu() to flip the navbar collapse state ONLY if it receives no parameter', () => {
+  it("should use toggleMenu() to flip the navbar collapse state ONLY if it receives no parameter", () => {
     expect(component.isCollapsed).toBe(true); //* Starts as collapsed
 
     component.toggleMenu();
@@ -44,89 +44,89 @@ describe('Navigation Bar Component', () => {
 
     component.toggleMenu(false);
     expect(component.isCollapsed).toBe(false); //* Directly set to false, i.e. expanded
-  })
-  it('should collapse the navbar by default, opening and closing by clicking the toggle button', () => {
+  });
+  it("should collapse the navbar by default, opening and closing by clicking the toggle button", () => {
     expect(component.isCollapsed).toBe(true);
-    const navToggler = fixture.debugElement.query(By.css('.navbar-toggler'));
-    expect(navToggler.attributes['aria-expanded']).toBe('false'); //* Since it's collapsed, it is NOT expanded
+    const navToggler = fixture.debugElement.query(By.css(".navbar-toggler"));
+    expect(navToggler.attributes["aria-expanded"]).toBe("false"); //* Since it's collapsed, it is NOT expanded
 
-    navToggler.triggerEventHandler('click');
+    navToggler.triggerEventHandler("click");
     fixture.detectChanges(); //* Using detect changes allows aria-expanded attribute to change
     expect(component.isCollapsed).toBe(false);
-    expect(navToggler.attributes['aria-expanded']).toBe('true'); //* Since it's no longer collapsed, IT EXPANDED
+    expect(navToggler.attributes["aria-expanded"]).toBe("true"); //* Since it's no longer collapsed, IT EXPANDED
 
-    navToggler.triggerEventHandler('click');
+    navToggler.triggerEventHandler("click");
     fixture.detectChanges();
     expect(component.isCollapsed).toBe(true);
-    expect(navToggler.attributes['aria-expanded']).toBe('false'); //* Since it's collapsed again, it is NOT expanded again
-  })
-  it('should display a divider when not collapsed', () => {
-    const navToggler = fixture.debugElement.query(By.css('.navbar-toggler'));
-    expect(navToggler.attributes['aria-expanded']).toBe('false') //* Currently collapsed
-    const missingDivider = fixture.debugElement.query(By.css('navbar__divider'));
+    expect(navToggler.attributes["aria-expanded"]).toBe("false"); //* Since it's collapsed again, it is NOT expanded again
+  });
+  it("should display a divider when not collapsed", () => {
+    const navToggler = fixture.debugElement.query(By.css(".navbar-toggler"));
+    expect(navToggler.attributes["aria-expanded"]).toBe("false"); //* Currently collapsed
+    const missingDivider = fixture.debugElement.query(By.css("navbar__divider"));
     expect(missingDivider).toBeNull(); //* So divider is not inserted into the DOM
 
-    navToggler.triggerEventHandler('click');
+    navToggler.triggerEventHandler("click");
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('true'); //* Now the navbar is expanded
-    const divider = fixture.debugElement.query(By.css('navbar__divider'));
+    expect(navToggler.attributes["aria-expanded"]).toBe("true"); //* Now the navbar is expanded
+    const divider = fixture.debugElement.query(By.css("navbar__divider"));
     expect(divider).toBeDefined(); //* So the divider is rendered
 
-    navToggler.triggerEventHandler('click');
+    navToggler.triggerEventHandler("click");
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('false'); //* Back to collapsed
+    expect(navToggler.attributes["aria-expanded"]).toBe("false"); //* Back to collapsed
     expect(divider).toBeNull(); //* So the divider is removed from the DOM
-  })
-  it('should close the navbar if a navigation item is selected', () => {
-    const navToggler = fixture.debugElement.query(By.css('.navbar-toggler'));
-    navToggler.triggerEventHandler('click'); //* Opening the navbar for the first time
+  });
+  it("should close the navbar if a navigation item is selected", () => {
+    const navToggler = fixture.debugElement.query(By.css(".navbar-toggler"));
+    navToggler.triggerEventHandler("click"); //* Opening the navbar for the first time
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('true');
+    expect(navToggler.attributes["aria-expanded"]).toBe("true");
 
     //! Check the navbar brand
-    const navBrand: HTMLAnchorElement =  fixture.debugElement.query(By.css('.navbar-brand')).nativeElement;
+    const navBrand: HTMLAnchorElement =  fixture.debugElement.query(By.css(".navbar-brand")).nativeElement;
     navBrand.click(); //* Route back home and the navbar closes
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('false');
+    expect(navToggler.attributes["aria-expanded"]).toBe("false");
 
-    navToggler.triggerEventHandler('click'); //* Reopen the navbar
+    navToggler.triggerEventHandler("click"); //* Reopen the navbar
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('true');
+    expect(navToggler.attributes["aria-expanded"]).toBe("true");
 
     //! Check the professions navLink
-    const professionsNavLink: HTMLAnchorElement =  fixture.debugElement.query(By.css('a[routerLink="/professions"]')).nativeElement;
+    const professionsNavLink: HTMLAnchorElement =  fixture.debugElement.query(By.css("a[routerLink=\"/professions\"]")).nativeElement;
     professionsNavLink.click(); //* Route to the professions list page and the navbar closes
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('false');
+    expect(navToggler.attributes["aria-expanded"]).toBe("false");
 
-    navToggler.triggerEventHandler('click'); //* Reopen the navbar
+    navToggler.triggerEventHandler("click"); //* Reopen the navbar
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('true');
+    expect(navToggler.attributes["aria-expanded"]).toBe("true");
 
     //! Check the reports navLink
-    const reportsNavLink: HTMLAnchorElement =  fixture.debugElement.query(By.css('a[routerLink="/reports"]')).nativeElement;
+    const reportsNavLink: HTMLAnchorElement =  fixture.debugElement.query(By.css("a[routerLink=\"/reports\"]")).nativeElement;
     reportsNavLink.click(); //* Route to the reports list page and the navbar closes
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('false');
+    expect(navToggler.attributes["aria-expanded"]).toBe("false");
 
-    navToggler.triggerEventHandler('click'); //* Reopen the navbar
+    navToggler.triggerEventHandler("click"); //* Reopen the navbar
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('true');
-    
+    expect(navToggler.attributes["aria-expanded"]).toBe("true");
+
     //! Check the employees navLink
-    const employeesNavLink: HTMLAnchorElement =  fixture.debugElement.query(By.css('a[routerLink="/employees"]')).nativeElement;
+    const employeesNavLink: HTMLAnchorElement =  fixture.debugElement.query(By.css("a[routerLink=\"/employees\"]")).nativeElement;
     employeesNavLink.click(); //* Route to the employees list page and the navbar closes
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('false');
+    expect(navToggler.attributes["aria-expanded"]).toBe("false");
 
-    navToggler.triggerEventHandler('click'); //* Reopen the navbar
+    navToggler.triggerEventHandler("click"); //* Reopen the navbar
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('true');
-    
+    expect(navToggler.attributes["aria-expanded"]).toBe("true");
+
     //! Check the precautions navLink
-    const precautionsNavLink: HTMLAnchorElement =  fixture.debugElement.query(By.css('a[routerLink="/precautions"]')).nativeElement;
+    const precautionsNavLink: HTMLAnchorElement =  fixture.debugElement.query(By.css("a[routerLink=\"/precautions\"]")).nativeElement;
     precautionsNavLink.click(); //* Route to the precautions list page and the navbar closes
     fixture.detectChanges();
-    expect(navToggler.attributes['aria-expanded']).toBe('false');
-  })
+    expect(navToggler.attributes["aria-expanded"]).toBe("false");
+  });
 });
