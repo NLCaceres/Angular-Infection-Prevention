@@ -1,12 +1,14 @@
 import { ComponentFixture, TestBed, fakeAsync, flush, tick } from "@angular/core/testing";
 import { SidebarComponent } from "./sidebar.component";
 import { ProfessionService } from "app/profession.service";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { NgbTypeaheadModule } from "@ng-bootstrap/ng-bootstrap";
 import { FormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { By } from "@angular/platform-browser";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideHttpClient, withFetch } from "@angular/common/http";
+import { RouterModule } from "@angular/router";
+import { routes } from "app/app-routing.module";
 
 describe("SidebarComponent", () => {
   let component: SidebarComponent;
@@ -16,11 +18,15 @@ describe("SidebarComponent", () => {
   beforeEach(async () => {
     serviceMock = jest.fn();
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule, RouterTestingModule, //? Enables routerLink props w/out requiring any injections
-        FormsModule, NgbTypeaheadModule ], //? NgbTypeahead declares relevant components for testing
-      declarations: [ SidebarComponent ],
-      providers: [ { provide: ProfessionService, useValue: { searchProfessions: serviceMock } } ],
-
+      declarations: [SidebarComponent],
+      imports: [ // ?: No longer need RouterTestingModule, just use RouterModule like in `app-routing.module.ts`
+        RouterModule.forRoot(routes), // ?: It'll auto-provide Location mocks now!
+        FormsModule, NgbTypeaheadModule
+      ],
+      providers: [
+        { provide: ProfessionService, useValue: { searchProfessions: serviceMock } },
+        provideHttpClient(withFetch()), provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(SidebarComponent);
