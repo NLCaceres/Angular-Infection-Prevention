@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
 import { ProfessionDetailComponent } from "./profession-detail.component";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ProfessionService } from "app/profession.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
 import { FormsModule } from "@angular/forms";
+import { provideHttpClient, withFetch } from "@angular/common/http";
 
 describe("ProfessionDetailComponent", () => {
   let component: ProfessionDetailComponent;
@@ -18,14 +19,15 @@ describe("ProfessionDetailComponent", () => {
     serviceMock = { getProfession: jest.fn(), updateProfession: jest.fn(), deleteProfession: jest.fn() };
     routerMock = jest.fn();
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule, FormsModule ],
-      declarations: [ ProfessionDetailComponent ],
+      declarations: [ProfessionDetailComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [FormsModule],
       providers: [
         { provide: ProfessionService, useValue: serviceMock },
         { provide: Router, useValue: { navigate: routerMock } },
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => "1" } }} }
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => "1" } } } },
+        provideHttpClient(withFetch()), provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfessionDetailComponent);

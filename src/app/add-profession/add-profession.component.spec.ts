@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
 import { AddProfessionComponent } from "./add-profession.component";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ProfessionService } from "app/profession.service";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
 import { Router } from "@angular/router";
+import { provideHttpClient, withFetch } from "@angular/common/http";
 
 describe("AddProfessionComponent", () => {
   let component: AddProfessionComponent;
@@ -17,13 +18,14 @@ describe("AddProfessionComponent", () => {
     serviceMock = jest.fn();
     routerMock = jest.fn();
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      declarations: [ AddProfessionComponent ],
+      declarations: [AddProfessionComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [],
       providers: [
         { provide: ProfessionService, useValue: { addProfession: serviceMock } },
-        { provide: Router, useValue: { navigate: routerMock } }
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+        { provide: Router, useValue: { navigate: routerMock } },
+        provideHttpClient(withFetch()), provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddProfessionComponent);

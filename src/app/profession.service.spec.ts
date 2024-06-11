@@ -1,19 +1,23 @@
 import { TestBed } from "@angular/core/testing";
 import { ProfessionService } from "./profession.service";
 import { MessageService } from "./message.service";
-import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
+import { provideHttpClient, withFetch } from "@angular/common/http";
 
 describe("ProfessionService", () => {
   let service: ProfessionService;
   let consoleErrMock: jest.Mock;
   let messageServiceMock: jest.Mock;
-  let httpTestController: HttpTestingController; //? Instead of a Spy or Mock, use this Ang built-in helper!
+  let httpTestController: HttpTestingController; // ?: Instead of a Spy or Mock, use this Ang built-in helper!
 
   beforeEach(async () => {
     messageServiceMock = jest.fn();
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      providers: [ ProfessionService, { provide: MessageService, useValue: { send: messageServiceMock } } ]
+      imports: [],
+      providers: [
+        ProfessionService, { provide: MessageService, useValue: { send: messageServiceMock } },
+        provideHttpClient(withFetch()), provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     httpTestController = TestBed.inject(HttpTestingController);
