@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProfessionService } from "../profession.service";
-import type { Profession } from "../Profession";
+import { type Profession } from "../models/Profession";
 
 @Component({
   selector: "profession-detail",

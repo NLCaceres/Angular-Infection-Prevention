@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, inject } from "@angular/core";
-import { Profession } from "../Profession";
+import { type Profession } from "../models/Profession";
 import { ProfessionService } from "../profession.service";
 import { debounceTime, fromEvent, Subscription } from "rxjs";
 
