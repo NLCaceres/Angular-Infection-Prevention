@@ -1,6 +1,6 @@
 import { Employee } from "./Employee";
 
-export interface Report {
+export type Report = {
   employee: Employee
   // healthPractice, location, date
-}
+};
