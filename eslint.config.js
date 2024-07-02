@@ -18,9 +18,15 @@ module.exports = tsEslint.config(
     processor: ngEslint.processInlineTemplates,
     rules: {
       "linebreak-style": ["error", "unix"],
+      "max-len": ["error", { "code": 100 }],
       "no-trailing-spaces": "error",
       "indent": "off",
       "@typescript-eslint/indent": ["error", 2],
+      "@typescript-eslint/member-delimiter-style": ["error", {
+        "multiline": { "delimiter": "semi", "requireLast": true },
+        "singleline": { "delimiter": "semi", "requireLast": true },
+        "multilineDetection": "brackets"
+      }],
       "quotes": "off",
       "@typescript-eslint/quotes": "error",
       "semi": "off",
