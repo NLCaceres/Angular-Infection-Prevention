@@ -1,5 +1,5 @@
 export type Profession = {
-  _id?: string; // Not technically optional BUT it won't have an ID until the server defines it
+  _id?: string; // - Not actually optional, just no ID until the server sets it
   observedOccupation: string;
   serviceDiscipline: string;
 };
