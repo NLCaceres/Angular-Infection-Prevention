@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { NavItem } from "../NavItem";
 
 @Component({
   selector: "navbar",
@@ -8,9 +7,7 @@ import { NavItem } from "../NavItem";
 })
 export class NavbarComponent {
   isCollapsed = true;
-  navBrand: NavItem = {
-    title: "Infection Protection"
-  };
+  navBrandTitle = "Infection Protection";
 
   toggleMenu(collapse?: boolean) {
     this.isCollapsed = (collapse) ?? (!this.isCollapsed);
