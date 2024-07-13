@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { ProfessionService } from "./profession.service";
-import { MessageService } from "./message.service";
+import { MessageService } from "./services/message.service";
 import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { provideHttpClient, withFetch } from "@angular/common/http";
 
@@ -8,7 +8,7 @@ describe("ProfessionService", () => {
   let service: ProfessionService;
   let consoleErrMock: jest.Mock;
   let messageServiceMock: jest.Mock;
-  let httpTestController: HttpTestingController; // ?: Instead of a Spy or Mock, use this Ang built-in helper!
+  let httpTestController: HttpTestingController; // ?: A built-in Ang helper to mock request data
 
   beforeEach(async () => {
     messageServiceMock = jest.fn();
@@ -32,138 +32,186 @@ describe("ProfessionService", () => {
     expect(newService).toBeTruthy();
   });
   it("should get all professions from \"/professions\"", () => {
+    // - WHEN `getAllProfessions` succeeds
     service.getAllProfessions().subscribe(professionList => {
+      // - THEN it'll receive 1 Profession with the following prop data
       expect(professionList.length).toBe(1);
-      expect(professionList[0]).toEqual({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
+      expect(professionList[0]).toEqual(
+        { observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }
+      );
     });
-    service.getAllProfessions().subscribe(() => { }); //* Failed to fetch the profession list
-    expect(messageServiceMock).toHaveBeenCalledTimes(2); //* Called once per getAllProfessions() call
+    service.getAllProfessions().subscribe(() => { }); // - This call will fail later
 
-    const requestList = httpTestController.match("http://localhost:8080/professions"); //* Check if any requests made to '/professions'
-    //* Success
+    // - The MessageServiceMock gets called once for each `getAllProfessions` subscription
+    expect(messageServiceMock).toHaveBeenCalledTimes(2);
+
+    // - Use `match(requestURL)` to check for requests made to that URL
+    const requestList = httpTestController.match("http://localhost:8080/professions");
+
+    // - 1st subscription receives the following stubbed data
     const successRequest = requestList[0];
-    successRequest.flush([{ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }]); //* Stub in data to be returned
+    successRequest.flush([{ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }]);
     expect(successRequest.request.method).toBe("GET");
-    expect(messageServiceMock).toHaveBeenCalledTimes(3); //* Now called by tap() for a successful response
+    // - AND WHEN httpTestController sends the above response, THEN `tap()` calls the messageService
+    expect(messageServiceMock).toHaveBeenCalledTimes(3);
 
-    //* Error case
+    // - 2nd subscription receives the following error status
     const errorRequest = requestList[1];
     errorRequest.flush("", { status: 403, statusText: "Forbidden" });
     expect(consoleErrMock).toHaveBeenCalledTimes(1);
-    expect(messageServiceMock).toHaveBeenCalledTimes(4); //* Finally called on catchError()
+    // - AND THEN `catchError()` will send an applicable human-readable error message
+    expect(messageServiceMock).toHaveBeenCalledTimes(4); // - By calling the MessageService
   });
   describe("should lookup professions based on a label parameter", () => {
     it("should return an empty array if the label is empty or blank", () => {
       service.searchProfessions("").subscribe(professionList => {
-        expect(professionList.length).toBe(0); //! An empty search term still returns an empty array!
+        // - WHEN an empty search term is used, THEN an empty array is returned
+        expect(professionList.length).toBe(0);
       });
 
       httpTestController.expectNone("http://localhost:8080/professions/?label=");
-      expect(messageServiceMock).toHaveBeenCalledTimes(0); //* No http call so no alert needed
+      // - BUT no actual http call made for empty search terms
+      expect(messageServiceMock).toHaveBeenCalledTimes(0); // - AND no alert needed
     });
     it("should receive a profession list based on a \"label\" query parameter", () => {
+      // - WHEN `searchProfessions` succeeds
       service.searchProfessions("Foobar").subscribe(professionList => {
+        // - THEN it'll receive 1 Profession with the following prop data
         expect(professionList.length).toBe(1);
-        expect(professionList[0]).toEqual({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
+        expect(professionList[0]).toEqual(
+          { observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }
+        );
       });
-      service.searchProfessions("Foobar").subscribe(() => { }); //* Failed to lookup the professions
-      expect(messageServiceMock).toHaveBeenCalledTimes(0); //* Not called until either success or error thrown
+      service.searchProfessions("Foobar").subscribe(() => { }); // - This sub will fail later
 
-      const requestList = httpTestController.match("http://localhost:8080/professions/?label=Foobar");
-      //* Success
+      // - WHEN neither a successful or error response received, THEN don't call the message service
+      expect(messageServiceMock).toHaveBeenCalledTimes(0);
+
+      const requestList = httpTestController.match(
+        "http://localhost:8080/professions/?label=Foobar"
+      );
+      // - On Success, httpTestController will send the following response data
       const successRequest = requestList[0];
-      successRequest.flush([{ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }]); //* Stub in data to be returned
+      successRequest.flush([{ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }]);
       expect(successRequest.request.method).toBe("GET");
-      expect(messageServiceMock).toHaveBeenCalledTimes(1); //* ONLY called onSuccess tap() and onError
+      // - AND `tap()` will call the message service
+      expect(messageServiceMock).toHaveBeenCalledTimes(1);
 
-      //* Error case
+      // - On error, the httpTestController will send the following error status
       const errorRequest = requestList[1];
       errorRequest.flush("", { status: 403, statusText: "Forbidden" });
-      expect(consoleErrMock).toHaveBeenCalledTimes(1); //* Error handler called
-      expect(messageServiceMock).toHaveBeenCalledTimes(2); //* Called onSuccess & now called onError
+      // - AND an error will be logged to the console
+      expect(consoleErrMock).toHaveBeenCalledTimes(1);
+      // - AND the message service will run an error alert visible to the user
+      expect(messageServiceMock).toHaveBeenCalledTimes(2);
     });
   });
   it("should get a single profession from \"/profession/{id}\"", () => {
+    // - WHEN `getProfession` succeeds
     service.getProfession("1").subscribe(profession => {
+      // - THEN the following mock response will be received
       expect(profession).toEqual({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
     });
-    service.getProfession("1").subscribe(() => { }); //* Failed to fetch the single profession
-    expect(messageServiceMock).toHaveBeenCalledTimes(2); //* Called once per getProfession() call
+    service.getProfession("1").subscribe(() => { }); // - This sub will fail later
+
+    // - MessageService called for every getProfession sub
+    expect(messageServiceMock).toHaveBeenCalledTimes(2);
 
     const requestList = httpTestController.match("http://localhost:8080/profession/1");
-    //* Success
+    // - On Success, the following response data will be sent
     const successRequest = requestList[0];
     successRequest.flush({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
     expect(successRequest.request.method).toBe("GET");
-    expect(messageServiceMock).toHaveBeenCalledTimes(3); //* Now called by tap() onSuccess
+    // - AND THEN `tap()` will call the message service
+    expect(messageServiceMock).toHaveBeenCalledTimes(3);
 
-    //* Error case
+    // - On Error, the following error response is sent
     const errorRequest = requestList[1];
     errorRequest.flush("", { status: 403, statusText: "Forbidden" });
+    // - AND the error is logged AND message service sends an error alert to the user
     expect(consoleErrMock).toHaveBeenCalledTimes(1);
-    expect(messageServiceMock).toHaveBeenCalledTimes(4); //* Finally called by error handler
+    expect(messageServiceMock).toHaveBeenCalledTimes(4);
   });
   it("should try to add a new profession via \"/professions/create\"", () => {
-    service.addProfession({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }).subscribe(profession => {
-      expect(profession).toEqual({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
-    });
-    service.addProfession({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }).subscribe(() => { });
-    expect(messageServiceMock).toHaveBeenCalledTimes(2); //* Called once per addProfession() call
+    service.addProfession({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" })
+      .subscribe(profession => {
+        expect(profession).toEqual({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
+      });
+    service.addProfession({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" })
+      .subscribe(() => { });
+
+    // - Message Service called for every new `addProfession()` sub
+    expect(messageServiceMock).toHaveBeenCalledTimes(2);
 
     const requestList = httpTestController.match("http://localhost:8080/professions/create");
-    //* Success
+    // - On Success, THEN the following response data is returned
     const successRequest = requestList[0];
     successRequest.flush({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
     expect(successRequest.request.method).toBe("POST");
-    expect(messageServiceMock).toHaveBeenCalledTimes(3); //* Called onSuccess
+    // - AND THEN the message service will be called
+    expect(messageServiceMock).toHaveBeenCalledTimes(3);
 
-    //* Error case
+    // - On error, THEN the following error status will be returned
     const errorRequest = requestList[1];
     errorRequest.flush("", { status: 403, statusText: "Forbidden" });
+    // - AND THEN, the error will be logged and displayed to the user via Message Service
     expect(consoleErrMock).toHaveBeenCalledTimes(1);
-    expect(messageServiceMock).toHaveBeenCalledTimes(4); //* Called by error handler
+    expect(messageServiceMock).toHaveBeenCalledTimes(4);
   });
   it("should try to update a new profession via \"/profession/{id}\"", () => {
-    service.updateProfession("1", { observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }).subscribe(response => {
-      expect(response).toEqual({ status: 200, statusText: "OK" });
-    });
-    service.updateProfession("1", { observedOccupation: "Foobar", serviceDiscipline: "Barfoo" }).subscribe(() => { });
-    expect(messageServiceMock).toHaveBeenCalledTimes(2); //* Called once per updateProfession() call
+    service.updateProfession("1", { observedOccupation: "Foobar", serviceDiscipline: "Barfoo" })
+      .subscribe(response => {
+        expect(response).toEqual({ status: 200, statusText: "OK" });
+      });
+    service.updateProfession("1", { observedOccupation: "Foobar", serviceDiscipline: "Barfoo" })
+      .subscribe(() => { });
+
+    // - The Message Service is called for every `updateProfession()` sub
+    expect(messageServiceMock).toHaveBeenCalledTimes(2);
 
     const requestList = httpTestController.match("http://localhost:8080/profession/1");
-    //* Success
+    // - On Success, THEN the following 200 status code is returned
     const successRequest = requestList[0];
     successRequest.flush({ status: 200, statusText: "OK" });
     expect(successRequest.request.method).toBe("PUT");
-    expect(messageServiceMock).toHaveBeenCalledTimes(3); //* Called onSuccessful response
+    // - AND THEN, the Message Service is called
+    expect(messageServiceMock).toHaveBeenCalledTimes(3);
 
-    //* Error case
+    // - On error, THEN the following error status code is returned
     const errorRequest = requestList[1];
     errorRequest.flush("", { status: 403, statusText: "Forbidden" });
+    // - AND THEN, the error is logged and displayed to the user
     expect(consoleErrMock).toHaveBeenCalledTimes(1);
-    expect(messageServiceMock).toHaveBeenCalledTimes(4); //* Called by error handler due to 403 response
+    expect(messageServiceMock).toHaveBeenCalledTimes(4);
   });
   it("should try to delete a new profession via \"/profession/{id}\"", () => {
-    service.deleteProfession("1").subscribe(profession => { //* Successful delete
+    // - WHEN `deleteProfession` succeeds
+    service.deleteProfession("1").subscribe(profession => {
+      // - THEN the following data is returned
       expect(profession).toEqual({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
     });
-    service.deleteProfession("1").subscribe(() => { }); //* Failed delete
-    expect(messageServiceMock).toHaveBeenCalledTimes(2); //* Called once per deleteProfession() call
+    service.deleteProfession("1").subscribe(() => { }); // - Will fail to delete later
+
+    // - The Message service will be called for every `deleteProfession()` sub
+    expect(messageServiceMock).toHaveBeenCalledTimes(2);
 
     const requestList = httpTestController.match("http://localhost:8080/profession/1");
-    //* Success
+    // - On success, THEN the following response will be returned
     const successRequest = requestList[0];
     successRequest.flush({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
     expect(successRequest.request.method).toBe("DELETE");
-    expect(messageServiceMock).toHaveBeenCalledTimes(3); //* Called onSuccessful delete
+    // - AND THEN, the Message Service will be called
+    expect(messageServiceMock).toHaveBeenCalledTimes(3);
 
-    //* Error case
+    // - On error, THEN the following error status will be returned
     const errorRequest = requestList[1];
     errorRequest.flush("", { status: 404, statusText: "Not found" });
+    // - AND THEN, the error will be logged and Message Service will display it to the user
     expect(consoleErrMock).toHaveBeenCalledTimes(1);
-    expect(messageServiceMock).toHaveBeenCalledTimes(4); //* Now that flush sent out error, catchError runs alert()
+    expect(messageServiceMock).toHaveBeenCalledTimes(4);
   });
   afterEach(() => {
-    httpTestController.verify(); //* Very often helpful to double check no pending requests getting fired and being left unhandled
+    // - Using `verify()` on the HttpTestController helps double check no requests were left pending
+    httpTestController.verify(); // - and forgotten/unhandled
   });
 });

@@ -1,19 +1,19 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Observable, of, catchError, tap } from "rxjs";
-import { Profession } from "./Profession";
-import { MessageService } from "./message.service";
+import { type Profession } from "./models/Profession";
+import { MessageService } from "./services/message.service";
 import { environment } from "environments/environment";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
 };
 
-@Injectable({ //? Marks the class to be injected as a dependency for some other component
-  providedIn: "root" //? Ensures that entire app can use it (from root and beyond)
-}) //? Additionally, it can also receive other components as dependencies
+@Injectable({ // ?: Marks the class to be injected as a dependency for some other component
+  providedIn: "root" // ?: Ensures that entire app can use it (from root and beyond)
+}) // ?: Additionally, it can also receive other components as dependencies
 export class ProfessionService {
-  //* In local dev, must have local version of server running in background to serve up data
+  // - In local dev, must have local version of server running in background to serve up data
   private HOST = environment.apiHost || "http://localhost:8080";
   private http = inject(HttpClient);
   private messageService = inject(MessageService);
@@ -43,13 +43,19 @@ export class ProfessionService {
       catchError(this.handleHttpError<Profession[]>("Looking up the profession", []))
     );
   }
-  //TODO: Check what's considered normal/abnormal for add/update/delete to get from the server so catchError can send a proper fallback for the view to handle
+  // TODO: Decide what's normal/abnormal for the server to return for "Add/Update/Delete"
+  // so catchError can better tailor its message for the view to display
   addProfession(profession: Profession) {
     this.alert("Attempting to add new profession data point");
 
     const endpoint = `${this.HOST}/professions/create`;
     return this.http.post<Profession>(endpoint, profession, httpOptions).pipe(
-      tap({ next: () => this.alert(`Adding profession with occupation=${profession.observedOccupation} and discipline=${profession.serviceDiscipline}`) }),
+      tap({ next: () =>
+        this.alert(
+          `Adding profession with occupation=${profession.observedOccupation}` +
+          ` and discipline=${profession.serviceDiscipline}`
+        )
+      }),
       catchError(this.handleHttpError("Adding a new profession"))
     );
   }
@@ -71,13 +77,14 @@ export class ProfessionService {
     );
   }
 
-  //? Use in catchError() to handle failed HTTP operations w/out crashing the app PLUS return a fallback value if needed!
+  // ?: Handles failed HTTP operations in `catchError()` by providing a fallback value
   private handleHttpError<T = undefined>(operation = "operation", fallbackVal?: T) {
-    //? Angular HttpClient ONLY defines HttpErrorResponse as a wrapper for all errors (I THINK), so it should be safe to coerce the caughtError into that type
-    return (error: HttpErrorResponse): Observable<T> => { //? PLUS it might make this func reusable across the app
-      console.error(error); //* Logging to console works for now!
+    // ?: Ang HttpClient ONLY defines HttpErrorResponse as a wrapper for ALL errors (I THINK)
+    // ?: SO it's probably safe to use for the returned func + might make it reusable across the app
+    return (error: HttpErrorResponse): Observable<T> => {
+      console.error(error); // - Instead of logging externally, logging to console works for now
 
-      //? Since Angular/Http wraps its errors in HttpErrorResponse, it should also be safe to use status to determine a good alert message to show the user
+      // ?: Thanks to HttpErrorResponse, should be safe to use status for a good alert message
       let alertMessage = `Sorry! ${operation} failed due to `;
       if (error.status >= 500) {
         alertMessage += "a server issue";
@@ -89,13 +96,14 @@ export class ProfessionService {
         alertMessage += "an unknown issue";
       }
       this.alert(alertMessage);
-      //todo Could divide the logging in two, one to print user friendly alerts WHILE the other sends to remote logs for debugging
+      // TODO: Could split log in two, 1. For User-Friendly alerts. 2. For Remote Debug Logs
 
-      return of(fallbackVal as T); //? Using `as` insists to Typescript that T can possibly INTENTIONALLY be type `undefined`
+      return of(fallbackVal as T); // ?: `as` INTENTIONALLY insists to TS that T CAN BE `undefined`
     };
   }
 
-  private alert(message: string) { //* Alert prints a user friendly message so they have a basic understanding that something went wrong
+  // - Display a user-friendly message to help the user understand something went wrong
+  private alert(message: string) {
     this.messageService.send(`Profession: ${message}`);
   }
 }
