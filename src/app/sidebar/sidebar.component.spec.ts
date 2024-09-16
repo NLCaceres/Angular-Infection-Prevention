@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, flush, tick } from "@angular/core/testing";
+import { ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
 import { SidebarComponent } from "./sidebar.component";
 import { ProfessionService } from "app/profession.service";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
@@ -38,8 +38,8 @@ describe("SidebarComponent", () => {
   });
 
   it("should create a sidebar component", () => {
-    expect(component).toBeTruthy(); //* Tough to say if toBeDefined() or toBeTruthy() is better
-    expect(serviceMock).toBeDefined(); //* Truthy would probably only ever fail if the value had to be 0 or false
+    expect(component).toBeTruthy(); // - Tough to say if toBeDefined() or toBeTruthy() is better
+    expect(serviceMock).toBeDefined(); // - Truthy would probably only ever fail if the value had to be 0 or false
   });
   it("should format the profession occupation and discipline into a readable string", () => {
     const professionName = component.formatter({ observedOccupation: "Foobar", serviceDiscipline: "Barfoo" });
@@ -57,9 +57,9 @@ describe("SidebarComponent", () => {
     inputElem.value = "barfoo";
     inputElem.dispatchEvent(new Event("input"));
     fixture.detectChanges();
-    tick(350); //* Must elapse the debounce period to ensure ngb-highlight list appears under searchbar
+    tick(350); // - Must elapse the debounce period to ensure ngb-highlight list appears under searchbar
 
     expect(fixture.debugElement.queryAll(By.css("ngb-highlight"))).toHaveLength(2);
-    flush(); //* Must clear async tasks to pass test
+    // ?: `fakeAsync` USED TO NEED `flush()` to clear async tasks, in this case any debounced search results
   }));
 });
