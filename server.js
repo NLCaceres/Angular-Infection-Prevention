@@ -5,7 +5,7 @@ const path = require("path"); //todo Purpose for the package in package.json, bu
 const app = express();
 
 // Create link to Angular build directory
-var distDir = __dirname + "/dist/";
+var distDir = __dirname + "/dist/browser";
 app.use(express.static(distDir));
 
 // Start the app by listening on the default Heroku port
