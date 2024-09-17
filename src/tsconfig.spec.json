@@ -4,6 +4,6 @@
     "outDir": "../out-tsc/spec",
     "types": ["jest", "node", "@angular/localize"]
   },
-  "files": ["test.ts", "polyfills.ts"], // Test.ts is not actually necessary BUT keep it for now
+  "files": ["test.ts"], // Test.ts is not actually necessary BUT keep it for now
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }
